@@ -10,7 +10,7 @@ public interface IUserService
     Task<PublicUserProfileDto?> GetPublicProfileAsync(string username, CancellationToken ct);
 }
 
-public class UserService(AppDbContext db) : IUserService
+public class UserService(AppDbContext db, IBadgeService badgeService) : IUserService
 {
     public async Task<IReadOnlyList<UserSearchResultDto>> SearchAsync(string query, int limit, CancellationToken ct)
     {
@@ -76,11 +76,15 @@ public class UserService(AppDbContext db) : IUserService
                 s.CommentCount))
             .ToList();
 
+        var enrichedSeals = await badgeService.ApplySealBadgesAsync(sealDtos, ct);
+        var badgeData = await badgeService.GetUserDataAsync(user.Id, ct);
+
         return new PublicUserProfileDto(
             user.Id,
             user.Username,
             user.CreatedAt,
-            sealDtos.Count,
-            sealDtos);
+            enrichedSeals.Count,
+            BadgeResolver.ForUser(badgeData),
+            enrichedSeals);
     }
 }

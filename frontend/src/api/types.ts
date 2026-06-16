@@ -60,6 +60,7 @@ export interface SeaLionDto {
   averageRating?: number
   ratingCount?: number
   commentCount?: number
+  badges?: string[]
 }
 
 export interface SeaLionDetailDto extends SeaLionDto {
@@ -122,5 +123,6 @@ export interface PublicUserProfileDto {
   username: string
   createdAt: string
   sealCount: number
+  badges: string[]
   seals: SeaLionDto[]
 }

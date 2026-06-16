@@ -12,4 +12,5 @@ public record PublicUserProfileDto(
     string Username,
     DateTime CreatedAt,
     int SealCount,
+    IReadOnlyList<string> Badges,
     IReadOnlyList<SeaLionDto> Seals);

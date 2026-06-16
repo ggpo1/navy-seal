@@ -19,6 +19,7 @@ builder.Services.AddScoped<ISeaLionService, SeaLionService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IBadgeService, BadgeService>();
 builder.Services.AddSingleton<ISeaLionGenerator, SeaLionGenerator>();
 
 var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()

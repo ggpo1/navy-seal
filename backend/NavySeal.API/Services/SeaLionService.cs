@@ -14,7 +14,11 @@ public interface ISeaLionService
     Task<IReadOnlyList<SeaLionDto>> GetByUserAsync(Guid userId, CancellationToken ct);
 }
 
-public class SeaLionService(AppDbContext db, ISeaLionGenerator generator, IRatingService ratingService) : ISeaLionService
+public class SeaLionService(
+    AppDbContext db,
+    ISeaLionGenerator generator,
+    IRatingService ratingService,
+    IBadgeService badgeService) : ISeaLionService
 {
     public async Task<SeaLionDto> GenerateAsync(Guid userId, SeaLionGenerationOptions? options, CancellationToken ct)
     {
@@ -33,7 +37,9 @@ public class SeaLionService(AppDbContext db, ISeaLionGenerator generator, IRatin
         await db.SaveChangesAsync(ct);
 
         var user = await db.Users.AsNoTracking().FirstAsync(u => u.Id == userId, ct);
-        return Map(seaLion, user.Username);
+        var dto = Map(seaLion, user.Username);
+        var enriched = await badgeService.ApplySealBadgesAsync([dto], ct);
+        return enriched[0];
     }
 
     public async Task<SeaLionDetailDto?> GetByIdAsync(Guid id, Guid? viewerUserId, CancellationToken ct)
@@ -69,32 +75,20 @@ public class SeaLionService(AppDbContext db, ISeaLionGenerator generator, IRatin
             .AsNoTracking()
             .OrderByDescending(s => s.CreatedAt)
             .Take(clampedLimit)
-            .Select(s => new
-            {
+            .Select(s => new SeaLionListRow(
                 s.Id,
                 s.UserId,
-                Username = s.User.Username,
+                s.User.Username,
                 s.Metadata,
                 s.CreatedAt,
-                RatingCount = s.Ratings.Count,
-                CommentCount = s.Comments.Count,
-                AverageRating = s.Ratings.Count == 0
+                s.Ratings.Count,
+                s.Comments.Count,
+                s.Ratings.Count == 0
                     ? 0.0
-                    : s.Ratings.Average(r => (double)r.Value)
-            })
+                    : s.Ratings.Average(r => (double)r.Value)))
             .ToListAsync(ct);
 
-        return items
-            .Select(s => new SeaLionDto(
-                s.Id,
-                s.UserId,
-                s.Username,
-                s.Metadata,
-                s.CreatedAt,
-                Math.Round(s.AverageRating, 2),
-                s.RatingCount,
-                s.CommentCount))
-            .ToList();
+        return await ToDtoListAsync(items, ct);
     }
 
     public async Task<IReadOnlyList<SeaLionDto>> GetTopAsync(
@@ -124,30 +118,18 @@ public class SeaLionService(AppDbContext db, ISeaLionGenerator generator, IRatin
             .ThenByDescending(s => s.Ratings.Count)
             .ThenByDescending(s => s.CreatedAt)
             .Take(clampedLimit)
-            .Select(s => new
-            {
+            .Select(s => new SeaLionListRow(
                 s.Id,
                 s.UserId,
-                Username = s.User.Username,
+                s.User.Username,
                 s.Metadata,
                 s.CreatedAt,
-                RatingCount = s.Ratings.Count,
-                CommentCount = s.Comments.Count,
-                AverageRating = s.Ratings.Average(r => (double)r.Value)
-            })
+                s.Ratings.Count,
+                s.Comments.Count,
+                s.Ratings.Average(r => (double)r.Value)))
             .ToListAsync(ct);
 
-        return items
-            .Select(s => new SeaLionDto(
-                s.Id,
-                s.UserId,
-                s.Username,
-                s.Metadata,
-                s.CreatedAt,
-                Math.Round(s.AverageRating, 2),
-                s.RatingCount,
-                s.CommentCount))
-            .ToList();
+        return await ToDtoListAsync(items, ct);
     }
 
     public async Task<IReadOnlyList<SeaLionDto>> GetByUserAsync(Guid userId, CancellationToken ct)
@@ -156,22 +138,27 @@ public class SeaLionService(AppDbContext db, ISeaLionGenerator generator, IRatin
             .AsNoTracking()
             .Where(s => s.UserId == userId)
             .OrderByDescending(s => s.CreatedAt)
-            .Select(s => new
-            {
+            .Select(s => new SeaLionListRow(
                 s.Id,
                 s.UserId,
-                Username = s.User.Username,
+                s.User.Username,
                 s.Metadata,
                 s.CreatedAt,
-                RatingCount = s.Ratings.Count,
-                CommentCount = s.Comments.Count,
-                AverageRating = s.Ratings.Count == 0
+                s.Ratings.Count,
+                s.Comments.Count,
+                s.Ratings.Count == 0
                     ? 0.0
-                    : s.Ratings.Average(r => (double)r.Value)
-            })
+                    : s.Ratings.Average(r => (double)r.Value)))
             .ToListAsync(ct);
 
-        return items
+        return await ToDtoListAsync(items, ct);
+    }
+
+    private async Task<IReadOnlyList<SeaLionDto>> ToDtoListAsync(
+        IReadOnlyList<SeaLionListRow> items,
+        CancellationToken ct)
+    {
+        var dtos = items
             .Select(s => new SeaLionDto(
                 s.Id,
                 s.UserId,
@@ -182,7 +169,19 @@ public class SeaLionService(AppDbContext db, ISeaLionGenerator generator, IRatin
                 s.RatingCount,
                 s.CommentCount))
             .ToList();
+
+        return await badgeService.ApplySealBadgesAsync(dtos, ct);
     }
+
+    private sealed record SeaLionListRow(
+        Guid Id,
+        Guid UserId,
+        string Username,
+        SeaLionMetadata Metadata,
+        DateTime CreatedAt,
+        int RatingCount,
+        int CommentCount,
+        double AverageRating);
 
     private static SeaLionDto Map(SeaLion seaLion, string username) =>
         new(seaLion.Id, seaLion.UserId, username, seaLion.Metadata, seaLion.CreatedAt);

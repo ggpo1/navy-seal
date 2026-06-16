@@ -119,6 +119,57 @@
     "countSeal_other": "{{count}} sea lions",
     "loading": "Loading..."
   },
+  "badges": {
+    "title": "Achievements",
+    "first_seal": {
+      "title": "First sea lion",
+      "description": "Generated your first sea lion"
+    },
+    "legendary_10": {
+      "title": "10 legendary",
+      "description": "10 legendary-quality sea lions"
+    },
+    "comments_100": {
+      "title": "100 comments",
+      "description": "Received 100 comments on sea lions"
+    },
+    "seals_5": {
+      "title": "5 sea lions",
+      "description": "Generated 5 sea lions"
+    },
+    "seals_25": {
+      "title": "25 sea lions",
+      "description": "Generated 25 sea lions"
+    },
+    "first_legendary": {
+      "title": "First legendary",
+      "description": "Got your first legendary sea lion"
+    },
+    "ratings_50": {
+      "title": "50 ratings",
+      "description": "Received 50 ratings on sea lions"
+    },
+    "commenter_25": {
+      "title": "Commenter",
+      "description": "Left 25 comments"
+    },
+    "critic_50": {
+      "title": "Critic",
+      "description": "Rated 50 other sea lions"
+    },
+    "popular_seal": {
+      "title": "Popular seal",
+      "description": "20+ ratings or 4.5+ average with 10+ ratings"
+    },
+    "top_week": {
+      "title": "Top of the week",
+      "description": "Sea lion in the weekly top chart"
+    },
+    "hall_of_fame": {
+      "title": "Hall of fame",
+      "description": "Sea lion in the all-time top chart"
+    }
+  },
   "errors": {
     "generateFailed": "Failed to generate",
     "loadFailed": "Failed to load"

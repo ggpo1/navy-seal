@@ -119,6 +119,57 @@
     "countSeal_other": "{{count}} 只海狮",
     "loading": "加载中..."
   },
+  "badges": {
+    "title": "成就",
+    "first_seal": {
+      "title": "第一只海狮",
+      "description": "生成了第一只海狮"
+    },
+    "legendary_10": {
+      "title": "10 只传奇",
+      "description": "拥有 10 只传奇品质海狮"
+    },
+    "comments_100": {
+      "title": "100 条评论",
+      "description": "海狮累计收到 100 条评论"
+    },
+    "seals_5": {
+      "title": "5 只海狮",
+      "description": "已生成 5 只海狮"
+    },
+    "seals_25": {
+      "title": "25 只海狮",
+      "description": "已生成 25 只海狮"
+    },
+    "first_legendary": {
+      "title": "第一只传奇",
+      "description": "获得第一只传奇品质海狮"
+    },
+    "ratings_50": {
+      "title": "50 个评分",
+      "description": "海狮累计收到 50 个评分"
+    },
+    "commenter_25": {
+      "title": "评论员",
+      "description": "发表了 25 条评论"
+    },
+    "critic_50": {
+      "title": "评论家",
+      "description": "为其他海狮打了 50 次分"
+    },
+    "popular_seal": {
+      "title": "人气海狮",
+      "description": "20+ 评分，或 10+ 评分且平均 4.5+"
+    },
+    "top_week": {
+      "title": "本周热门",
+      "description": "海狮进入近 7 日排行榜"
+    },
+    "hall_of_fame": {
+      "title": "名人堂",
+      "description": "海狮进入总排行榜"
+    }
+  },
   "errors": {
     "generateFailed": "生成失败",
     "loadFailed": "加载失败"

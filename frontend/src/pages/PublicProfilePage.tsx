@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api/client'
 import type { PublicUserProfileDto } from '../api/types'
 import { SeaLionCard } from '../components/SeaLionCard'
+import { BadgeList } from '../components/BadgeList'
 import { useAuth } from '../context/AuthContext'
 import { formatUsernameLabel } from '../utils/username'
 
@@ -54,6 +55,13 @@ export function PublicProfilePage() {
         <span className="profile__count">
           {t('profile.countSeal', { count: profile.sealCount })}
         </span>
+
+        {(profile.badges?.length ?? 0) > 0 && (
+          <section className="profile__badges" aria-label={t('badges.title')}>
+            <h2 className="profile__badges-title">{t('badges.title')}</h2>
+            <BadgeList badges={profile.badges} variant="full" />
+          </section>
+        )}
       </header>
 
       {profile.seals.length === 0 ? (

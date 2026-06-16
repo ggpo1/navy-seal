@@ -10,7 +10,10 @@ public record SeaLionDto(
     DateTime CreatedAt,
     double AverageRating = 0,
     int RatingCount = 0,
-    int CommentCount = 0);
+    int CommentCount = 0)
+{
+    public IReadOnlyList<string> Badges { get; init; } = [];
+}
 
 public record SeaLionListResponse(IReadOnlyList<SeaLionDto> Items);
 
