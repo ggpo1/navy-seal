@@ -24,11 +24,13 @@ public class AuthService(AppDbContext db, IOptions<JwtSettings> jwtOptions) : IA
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request, CancellationToken ct)
     {
-        var username = request.Username.Trim();
+        var username = UsernameValidator.Normalize(request.Username);
         var email = request.Email.Trim().ToLowerInvariant();
 
-        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(request.Password))
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(request.Password))
             throw new InvalidOperationException("Все поля обязательны.");
+
+        UsernameValidator.Validate(username);
 
         if (request.Password.Length < 6)
             throw new InvalidOperationException("Пароль должен быть не короче 6 символов.");
@@ -55,7 +57,7 @@ public class AuthService(AppDbContext db, IOptions<JwtSettings> jwtOptions) : IA
 
     public async Task<AuthResponse?> LoginAsync(LoginRequest request, CancellationToken ct)
     {
-        var username = request.Username.Trim();
+        var username = UsernameValidator.Normalize(request.Username);
         var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username, ct);
 
         if (user is null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))

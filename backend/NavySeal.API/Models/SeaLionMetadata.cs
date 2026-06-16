@@ -32,4 +32,6 @@ public class SeaLionMetadata
     public string BackgroundStyle { get; set; } = "waves";
     public double WaveIntensity { get; set; } = 1.0;
     public string Name { get; set; } = "Sea Lion";
+    public string Quality { get; set; } = "common";
+    public int Age { get; set; }
 }

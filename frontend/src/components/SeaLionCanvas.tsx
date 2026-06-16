@@ -1,26 +1,53 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { SeaLionMetadata } from '../api/types'
 import { resolveTraits, scaleBody } from './sealTraits'
+
+const DESIGN_EXTENT = 150
 
 interface Props {
   metadata: SeaLionMetadata
   width?: number
   height?: number
   className?: string
+  showLabel?: boolean
 }
 
-const POSE_LABELS: Record<string, string> = {
-  upright: 'upright',
-  lying: 'lying',
-  sitting: 'sitting',
-  barking: 'barking',
-  swimming: 'swimming',
-  stretching: 'stretching',
-  bellyUp: 'belly up',
-}
-
-export function SeaLionCanvas({ metadata, width = 320, height = 320, className }: Props) {
+export function SeaLionCanvas({
+  metadata,
+  width,
+  height,
+  className,
+  showLabel = false,
+}: Props) {
+  const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { t } = useTranslation()
+  const [drawSize, setDrawSize] = useState({
+    width: width ?? 320,
+    height: height ?? 320,
+  })
+
+  useEffect(() => {
+    if (width != null && height != null) {
+      setDrawSize({ width, height })
+      return
+    }
+
+    const container = containerRef.current
+    if (!container) return
+
+    const updateSize = () => {
+      const rect = container.getBoundingClientRect()
+      const side = Math.max(1, Math.floor(Math.min(rect.width, rect.height)))
+      setDrawSize({ width: side, height: side })
+    }
+
+    updateSize()
+    const observer = new ResizeObserver(updateSize)
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [width, height])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -29,22 +56,30 @@ export function SeaLionCanvas({ metadata, width = 320, height = 320, className }
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    const { width: w, height: h } = drawSize
     const dpr = window.devicePixelRatio || 1
-    canvas.width = width * dpr
-    canvas.height = height * dpr
-    canvas.style.width = `${width}px`
-    canvas.style.height = `${height}px`
+    canvas.width = w * dpr
+    canvas.height = h * dpr
+    canvas.style.width = '100%'
+    canvas.style.height = '100%'
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-    drawSeaLion(ctx, metadata, width, height)
-  }, [metadata, width, height])
+    drawSeaLion(ctx, metadata, w, h, showLabel)
+  }, [metadata, drawSize, showLabel])
+
+  const fixedSize = width != null && height != null
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={className}
-      aria-label={`${metadata.name}, ${POSE_LABELS[metadata.pose] ?? metadata.pose ?? 'upright'} pose`}
-    />
+    <div
+      ref={containerRef}
+      className={className ?? 'seal-canvas-wrap'}
+      style={fixedSize ? { width, height } : undefined}
+    >
+      <canvas
+        ref={canvasRef}
+        aria-label={`${metadata.name}, ${t(`pose.${metadata.pose ?? 'upright'}`)} pose`}
+      />
+    </div>
   )
 }
 
@@ -53,6 +88,7 @@ function drawSeaLion(
   m: SeaLionMetadata,
   w: number,
   h: number,
+  showLabel: boolean,
 ) {
   ctx.clearRect(0, 0, w, h)
 
@@ -61,14 +97,19 @@ function drawSeaLion(
 
   drawBackground(ctx, m, w, h)
 
+  const labelReserve = showLabel ? 24 : 0
+  const drawH = h - labelReserve
   const cx = w / 2
-  const cy = h / 2 + 10
+  const cy = drawH / 2 + (showLabel ? 4 : 8)
   const pose = m.pose || 'upright'
+  const rotationPadding = 1 + Math.abs(m.rotation) / 180 * 0.12
+  const fitScale =
+    (Math.min(w, drawH) / (DESIGN_EXTENT * 2 * m.size * rotationPadding)) * 0.94
 
   ctx.save()
   ctx.translate(cx, cy)
   ctx.rotate((m.rotation * Math.PI) / 180)
-  ctx.scale(m.size, m.size)
+  ctx.scale(fitScale * m.size, fitScale * m.size)
 
   switch (pose) {
     case 'lying':
@@ -95,10 +136,13 @@ function drawSeaLion(
 
   ctx.restore()
 
-  ctx.fillStyle = '#1a3a4a'
-  ctx.font = 'bold 16px system-ui, sans-serif'
-  ctx.textAlign = 'center'
-  ctx.fillText(m.name, cx, h - 16)
+  if (showLabel) {
+    const fontSize = Math.max(11, Math.min(16, w * 0.05))
+    ctx.fillStyle = '#1a3a4a'
+    ctx.font = `bold ${fontSize}px system-ui, sans-serif`
+    ctx.textAlign = 'center'
+    ctx.fillText(m.name, cx, h - Math.max(8, fontSize * 0.75))
+  }
 }
 
 function drawBackground(ctx: CanvasRenderingContext2D, m: SeaLionMetadata, w: number, h: number) {
@@ -243,12 +287,50 @@ function drawBody(
 ) {
   const scaled = scaleBody(m, rx, ry)
 
-  ctx.fillStyle = m.bodyColor
   ctx.beginPath()
   ctx.ellipse(x, y, scaled.rx, scaled.ry, angle, 0, Math.PI * 2)
+  const bodyGradient = ctx.createRadialGradient(
+    x - scaled.rx * 0.2,
+    y - scaled.ry * 0.3,
+    scaled.rx * 0.2,
+    x + scaled.rx * 0.25,
+    y + scaled.ry * 0.25,
+    scaled.rx * 1.25,
+  )
+  bodyGradient.addColorStop(0, lightenHex(m.bodyColor, 0.12))
+  bodyGradient.addColorStop(1, darkenHex(m.bodyColor, 0.2))
+  ctx.fillStyle = bodyGradient
   ctx.fill()
 
+  ctx.save()
+  ctx.clip()
+  drawFurTexture(ctx, x, y, scaled.rx, scaled.ry, m.seed ?? 0)
+  ctx.restore()
+
   ctx.fillStyle = m.bellyColor
+  ctx.beginPath()
+  ctx.ellipse(
+    x + scaled.rx * 0.18,
+    y + scaled.ry * 0.15,
+    scaled.rx * 0.58,
+    scaled.ry * 0.62,
+    angle + 0.2,
+    0,
+    Math.PI * 2,
+  )
+  ctx.fill()
+
+  const bellyShade = ctx.createRadialGradient(
+    x + scaled.rx * 0.35,
+    y + scaled.ry * 0.35,
+    scaled.rx * 0.1,
+    x + scaled.rx * 0.2,
+    y + scaled.ry * 0.2,
+    scaled.rx * 0.7,
+  )
+  bellyShade.addColorStop(0, 'rgba(255,255,255,0.2)')
+  bellyShade.addColorStop(1, 'rgba(0,0,0,0.12)')
+  ctx.fillStyle = bellyShade
   ctx.beginPath()
   ctx.ellipse(
     x + scaled.rx * 0.18,
@@ -330,9 +412,22 @@ function drawFace(
   ctx.translate(headX, headY)
   ctx.rotate(headAngle)
 
-  ctx.fillStyle = m.bodyColor
+  drawEar(ctx, -headRx * 0.35, -headRy * 0.75, headRx * 0.23, headRy * 0.2, m.bodyColor)
+  drawEar(ctx, headRx * 0.22, -headRy * 0.72, headRx * 0.2, headRy * 0.18, m.bodyColor)
+
   ctx.beginPath()
   ctx.ellipse(0, 0, headRx, headRy, 0, 0, Math.PI * 2)
+  const headGradient = ctx.createRadialGradient(
+    -headRx * 0.2,
+    -headRy * 0.3,
+    headRx * 0.2,
+    headRx * 0.25,
+    headRy * 0.2,
+    headRx * 1.2,
+  )
+  headGradient.addColorStop(0, lightenHex(m.bodyColor, 0.12))
+  headGradient.addColorStop(1, darkenHex(m.bodyColor, 0.22))
+  ctx.fillStyle = headGradient
   ctx.fill()
 
   ctx.fillStyle = m.bellyColor
@@ -343,6 +438,15 @@ function drawFace(
   ctx.fillStyle = m.noseColor
   ctx.beginPath()
   ctx.ellipse(noseOffsetX, 7, 6 * traits.snoutLength, 4 * traits.snoutLength, 0, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.fillStyle = darkenHex(m.noseColor, 0.18)
+  ctx.beginPath()
+  ctx.arc(noseOffsetX - 2.3 * traits.snoutLength, 7.2, 1.3 * traits.snoutLength, 0, Math.PI * 2)
+  ctx.arc(noseOffsetX + 2.3 * traits.snoutLength, 7.2, 1.3 * traits.snoutLength, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.fillStyle = 'rgba(255,255,255,0.35)'
+  ctx.beginPath()
+  ctx.arc(noseOffsetX - 1.5, 5.5, 1.1, 0, Math.PI * 2)
   ctx.fill()
 
   drawEyes(ctx, m, -7, -13)
@@ -363,6 +467,73 @@ function drawBarkMouth(ctx: CanvasRenderingContext2D, x: number, y: number) {
   ctx.beginPath()
   ctx.ellipse(x, y + 4, 6, 7, 0, 0, Math.PI * 2)
   ctx.fill()
+}
+
+function drawEar(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  rx: number,
+  ry: number,
+  bodyColor: string,
+) {
+  ctx.fillStyle = darkenHex(bodyColor, 0.16)
+  ctx.beginPath()
+  ctx.ellipse(x, y, rx, ry, -0.15, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.fillStyle = lightenHex(bodyColor, 0.08)
+  ctx.beginPath()
+  ctx.ellipse(x, y, rx * 0.55, ry * 0.55, -0.15, 0, Math.PI * 2)
+  ctx.fill()
+}
+
+function drawFurTexture(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  rx: number,
+  ry: number,
+  seed: number,
+) {
+  const lineCount = 24
+  for (let i = 0; i < lineCount; i++) {
+    const t = i / lineCount
+    const angle = ((seed % 17) * 0.03) + t * Math.PI * 1.9
+    const px = cx + Math.cos(angle) * rx * 0.65
+    const py = cy + Math.sin(angle * 1.4) * ry * 0.52
+    ctx.strokeStyle = `rgba(255,255,255,${0.03 + (i % 5) * 0.01})`
+    ctx.lineWidth = 0.8
+    ctx.beginPath()
+    ctx.moveTo(px - 6, py - 2)
+    ctx.lineTo(px + 6, py + 2)
+    ctx.stroke()
+  }
+}
+
+function lightenHex(hex: string, amount: number): string {
+  return adjustHex(hex, Math.abs(amount))
+}
+
+function darkenHex(hex: string, amount: number): string {
+  return adjustHex(hex, -Math.abs(amount))
+}
+
+function adjustHex(hex: string, delta: number): string {
+  const normalized = hex.replace('#', '')
+  if (normalized.length !== 6) return hex
+
+  const r = parseInt(normalized.slice(0, 2), 16)
+  const g = parseInt(normalized.slice(2, 4), 16)
+  const b = parseInt(normalized.slice(4, 6), 16)
+
+  const transform = (value: number) =>
+    Math.max(0, Math.min(255, Math.round(value + 255 * delta)))
+
+  const rr = transform(r).toString(16).padStart(2, '0')
+  const gg = transform(g).toString(16).padStart(2, '0')
+  const bb = transform(b).toString(16).padStart(2, '0')
+
+  return `#${rr}${gg}${bb}`
 }
 
 function drawPattern(

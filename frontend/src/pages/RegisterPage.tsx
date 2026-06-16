@@ -1,10 +1,13 @@
 import { type FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useTranslation } from 'react-i18next'
+import { sanitizeUsernameInput, validateUsername } from '../utils/username'
 
 export function RegisterPage() {
   const { register } = useAuth()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,11 +18,19 @@ export function RegisterPage() {
     e.preventDefault()
     setLoading(true)
     setError(null)
+
+    const usernameError = validateUsername(username)
+    if (usernameError) {
+      setError(t(`validation.username.${usernameError}`))
+      setLoading(false)
+      return
+    }
+
     try {
-      await register(username, email, password)
+      await register(username.trim(), email, password)
       navigate('/')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка регистрации')
+      setError(err instanceof Error ? err.message : t('errors.generateFailed'))
     } finally {
       setLoading(false)
     }
@@ -28,13 +39,23 @@ export function RegisterPage() {
   return (
     <div className="auth">
       <form className="auth__form" onSubmit={handleSubmit}>
-        <h1>Регистрация</h1>
+        <h1>{t('auth.registerTitle')}</h1>
         <label>
-          Имя пользователя
-          <input value={username} onChange={(e) => setUsername(e.target.value)} required />
+          {t('auth.username')}
+          <input
+            value={username}
+            onChange={(e) => setUsername(sanitizeUsernameInput(e.target.value))}
+            required
+            minLength={3}
+            maxLength={32}
+            pattern="[a-zA-Z0-9][a-zA-Z0-9_]*"
+            autoComplete="username"
+            spellCheck={false}
+          />
+          <span className="field-hint">{t('validation.username.hint')}</span>
         </label>
         <label>
-          Email
+          {t('auth.email')}
           <input
             type="email"
             value={email}
@@ -43,7 +64,7 @@ export function RegisterPage() {
           />
         </label>
         <label>
-          Пароль
+          {t('auth.password')}
           <input
             type="password"
             value={password}
@@ -54,10 +75,10 @@ export function RegisterPage() {
         </label>
         {error && <p className="error">{error}</p>}
         <button type="submit" className="btn btn--primary" disabled={loading}>
-          {loading ? 'Регистрируем...' : 'Зарегистрироваться'}
+          {loading ? t('auth.submitRegisterLoading') : t('auth.submitRegister')}
         </button>
         <p className="auth__switch">
-          Уже есть аккаунт? <Link to="/login">Войти</Link>
+          {t('auth.alreadyHaveAccountPrefix')} <Link to="/login">{t('auth.alreadyHaveAccountAction')}</Link>
         </p>
       </form>
     </div>

@@ -1,0 +1,126 @@
+{
+  "common": {
+    "or": "or",
+    "loading": "Loading...",
+    "errorLoading": "Failed to load"
+  },
+  "auth": {
+    "login": "Log in",
+    "register": "Register",
+    "logout": "Log out",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "loginTitle": "Log in",
+    "registerTitle": "Register",
+    "noAccount": "No account? Register",
+    "alreadyHaveAccount": "Already have an account? Log in",
+    "submitLogin": "Log in",
+    "submitRegister": "Register",
+    "submitLoggingIn": "Logging in...",
+    "noAccountPrefix": "No account? ",
+    "noAccountAction": "Register",
+    "alreadyHaveAccountPrefix": "Already have an account? ",
+    "alreadyHaveAccountAction": "Log in",
+    "submitRegisterLoading": "Registering..."
+  },
+  "header": {
+    "profile": "Profile"
+  },
+  "generator": {
+    "title": "Sea Lion Generator",
+    "subtitle": "Press the button — get unique metadata and a rendered sea lion.",
+    "generate": "Generate",
+    "generating": "Generating...",
+    "authHintPrefix": "To generate, ",
+    "authHintSuffix": " or register.",
+    "previewPlaceholder": "Your sea lion will appear here"
+  },
+  "seaLionMeta": {
+    "pose": "Pose",
+    "expression": "Expression",
+    "pattern": "Pattern",
+    "eyeStyle": "Eyes",
+    "hat": "Hat",
+    "accessory": "Accessory",
+    "quality": "Quality",
+    "age": "Age",
+    "ageYears_one": "{{count}} year",
+    "ageYears_other": "{{count}} years"
+  },
+  "expression": {
+    "happy": "happy",
+    "curious": "curious",
+    "chill": "chill",
+    "surprised": "surprised"
+  },
+  "pattern": {
+    "solid": "solid",
+    "spots": "spots",
+    "stripes": "stripes",
+    "speckles": "speckles",
+    "patchy": "patchy"
+  },
+  "eyeStyle": {
+    "round": "round",
+    "sleepy": "sleepy",
+    "wink": "wink"
+  },
+  "hat": {
+    "captain": "captain",
+    "party": "party",
+    "sailor": "sailor",
+    "crown": "crown"
+  },
+  "accessory": {
+    "ball": "ball",
+    "fish": "fish",
+    "anchor": "anchor",
+    "starfish": "starfish"
+  },
+  "recent": {
+    "title": "Recently generated",
+    "empty": "No one has generated any sea lions yet"
+  },
+  "profile": {
+    "title": "Profile @{{username}}",
+    "emptyTitle": "Log in to see your profile",
+    "emptyAction": "Log in",
+    "noSealsTitle": "You don't have any sea lions yet",
+    "noSealsAction": "Generate your first",
+    "countSeal_one": "{{count}} sea lion",
+    "countSeal_other": "{{count}} sea lions",
+    "loading": "Loading..."
+  },
+  "errors": {
+    "generateFailed": "Failed to generate",
+    "loadFailed": "Failed to load"
+  },
+  "validation": {
+    "username": {
+      "hint": "Letters, numbers, and underscore only. No @ — it is added automatically.",
+      "required": "Username is required.",
+      "tooShort": "Username must be at least 3 characters.",
+      "tooLong": "Username must be at most 32 characters.",
+      "startsWithAt": "Do not include @ in the username.",
+      "invalidChars": "Username may only contain Latin letters, numbers, and underscore."
+    }
+  },
+  "pose": {
+    "upright": "upright",
+    "lying": "lying",
+    "sitting": "sitting",
+    "barking": "barking",
+    "swimming": "swimming",
+    "stretching": "stretching",
+    "bellyUp": "belly up"
+  },
+  "quality": {
+    "common": "common",
+    "uncommon": "uncommon",
+    "rare": "rare",
+    "epic": "epic",
+    "legendary": "legendary"
+  }
+}
+

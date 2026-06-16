@@ -10,3 +10,5 @@ public record SeaLionDto(
     DateTime CreatedAt);
 
 public record SeaLionListResponse(IReadOnlyList<SeaLionDto> Items);
+
+public record GenerateSeaLionRequest(string? Quality = null, int? Age = null);

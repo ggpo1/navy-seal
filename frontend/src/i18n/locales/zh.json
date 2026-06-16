@@ -1,0 +1,126 @@
+{
+  "common": {
+    "or": "或",
+    "loading": "加载中...",
+    "errorLoading": "加载失败"
+  },
+  "auth": {
+    "login": "登录",
+    "register": "注册",
+    "logout": "退出",
+    "username": "用户名",
+    "email": "邮箱",
+    "password": "密码",
+    "loginTitle": "登录",
+    "registerTitle": "注册",
+    "noAccount": "没有账号？去注册",
+    "alreadyHaveAccount": "已有账号？去登录",
+    "submitLogin": "登录",
+    "submitRegister": "注册",
+    "submitLoggingIn": "正在登录...",
+    "noAccountPrefix": "没有账号？ ",
+    "noAccountAction": "注册",
+    "alreadyHaveAccountPrefix": "已有账号？ ",
+    "alreadyHaveAccountAction": "去登录",
+    "submitRegisterLoading": "正在注册..."
+  },
+  "header": {
+    "profile": "个人资料"
+  },
+  "generator": {
+    "title": "海狮生成器",
+    "subtitle": "点击按钮——获取独特的元数据并生成海狮。",
+    "generate": "生成",
+    "generating": "生成中...",
+    "authHintPrefix": "要生成，",
+    "authHintSuffix": " 或注册。",
+    "previewPlaceholder": "你的海狮将出现在这里"
+  },
+  "seaLionMeta": {
+    "pose": "姿势",
+    "expression": "表情",
+    "pattern": "花纹",
+    "eyeStyle": "眼睛",
+    "hat": "帽子",
+    "accessory": "配件",
+    "quality": "品质",
+    "age": "年龄",
+    "ageYears_one": "{{count}} 岁",
+    "ageYears_other": "{{count}} 岁"
+  },
+  "expression": {
+    "happy": "开心",
+    "curious": "好奇",
+    "chill": "冷静",
+    "surprised": "惊讶"
+  },
+  "pattern": {
+    "solid": "纯色",
+    "spots": "斑点",
+    "stripes": "条纹",
+    "speckles": "密集小点",
+    "patchy": "不规则斑块"
+  },
+  "eyeStyle": {
+    "round": "圆眼",
+    "sleepy": "困眼",
+    "wink": "眨眼"
+  },
+  "hat": {
+    "captain": "船长",
+    "party": "派对",
+    "sailor": "水手",
+    "crown": "皇冠"
+  },
+  "accessory": {
+    "ball": "球",
+    "fish": "鱼",
+    "anchor": "锚",
+    "starfish": "海星"
+  },
+  "recent": {
+    "title": "最近生成的",
+    "empty": "目前还没有人生成海狮"
+  },
+  "profile": {
+    "title": "个人资料 @{{username}}",
+    "emptyTitle": "请登录以查看你的个人资料",
+    "emptyAction": "登录",
+    "noSealsTitle": "你还没有海狮",
+    "noSealsAction": "生成你的第一个",
+    "countSeal_one": "{{count}} 只海狮",
+    "countSeal_other": "{{count}} 只海狮",
+    "loading": "加载中..."
+  },
+  "errors": {
+    "generateFailed": "生成失败",
+    "loadFailed": "加载失败"
+  },
+  "validation": {
+    "username": {
+      "hint": "仅允许字母、数字和下划线。不要输入 @ — 系统会自动添加。",
+      "required": "请输入用户名。",
+      "tooShort": "用户名至少 3 个字符。",
+      "tooLong": "用户名最多 32 个字符。",
+      "startsWithAt": "用户名中不要包含 @。",
+      "invalidChars": "用户名只能包含拉丁字母、数字和下划线。"
+    }
+  },
+  "pose": {
+    "upright": "直立",
+    "lying": "躺着",
+    "sitting": "坐着",
+    "barking": "吠叫",
+    "swimming": "游泳",
+    "stretching": "伸展",
+    "bellyUp": "肚皮朝上"
+  },
+  "quality": {
+    "common": "普通",
+    "uncommon": "优秀",
+    "rare": "稀有",
+    "epic": "史诗",
+    "legendary": "传说"
+  }
+}
+

@@ -1,4 +1,4 @@
-import type { AuthResponse, SeaLionDto, SeaLionListResponse, UserDto } from './types'
+import type { AuthResponse, GenerateSeaLionRequest, SeaLionDto, SeaLionListResponse, UserDto } from './types'
 
 const TOKEN_KEY = 'navy_seal_token'
 
@@ -54,8 +54,11 @@ export const api = {
     return request<UserDto>('/api/auth/me')
   },
 
-  generateSeaLion() {
-    return request<SeaLionDto>('/api/sealions/generate', { method: 'POST' })
+  generateSeaLion(options?: GenerateSeaLionRequest) {
+    return request<SeaLionDto>('/api/sealions/generate', {
+      method: 'POST',
+      body: options ? JSON.stringify(options) : undefined,
+    })
   },
 
   getRecent(limit = 12) {

@@ -7,14 +7,14 @@ namespace NavySeal.API.Services;
 
 public interface ISeaLionService
 {
-    Task<SeaLionDto> GenerateAsync(Guid userId, CancellationToken ct);
+    Task<SeaLionDto> GenerateAsync(Guid userId, SeaLionGenerationOptions? options, CancellationToken ct);
     Task<IReadOnlyList<SeaLionDto>> GetRecentAsync(int limit, CancellationToken ct);
     Task<IReadOnlyList<SeaLionDto>> GetByUserAsync(Guid userId, CancellationToken ct);
 }
 
 public class SeaLionService(AppDbContext db, ISeaLionGenerator generator) : ISeaLionService
 {
-    public async Task<SeaLionDto> GenerateAsync(Guid userId, CancellationToken ct)
+    public async Task<SeaLionDto> GenerateAsync(Guid userId, SeaLionGenerationOptions? options, CancellationToken ct)
     {
         var userExists = await db.Users.AnyAsync(u => u.Id == userId, ct);
         if (!userExists)
@@ -24,7 +24,7 @@ public class SeaLionService(AppDbContext db, ISeaLionGenerator generator) : ISea
         {
             Id = Guid.NewGuid(),
             UserId = userId,
-            Metadata = generator.Generate()
+            Metadata = generator.Generate(options)
         };
 
         db.SeaLions.Add(seaLion);

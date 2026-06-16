@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NavySeal.API.DTOs;
+using NavySeal.API.Models;
 using NavySeal.API.Services;
 
 namespace NavySeal.API.Controllers;
@@ -13,14 +14,27 @@ public class SeaLionsController(ISeaLionService seaLionService) : ControllerBase
     [Authorize]
     [HttpPost("generate")]
     [ProducesResponseType(typeof(SeaLionDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Generate(CancellationToken ct)
+    public async Task<IActionResult> Generate(
+        [FromBody] GenerateSeaLionRequest? request,
+        CancellationToken ct)
     {
         var userId = GetUserId();
         if (userId is null)
             return Unauthorized();
 
-        var seaLion = await seaLionService.GenerateAsync(userId.Value, ct);
+        if (request?.Quality is not null && !SeaLionGenerator.IsValidQuality(request.Quality))
+            return BadRequest(new { message = "Недопустимое качество. Допустимые значения: common, uncommon, rare, epic, legendary." });
+
+        if (request?.Age is int age && (age < 0 || age > 20))
+            return BadRequest(new { message = "Возраст должен быть от 0 до 20 лет." });
+
+        var options = request is null
+            ? null
+            : new SeaLionGenerationOptions(request.Quality, request.Age);
+
+        var seaLion = await seaLionService.GenerateAsync(userId.Value, options, ct);
         return Ok(seaLion);
     }
 

@@ -4,5 +4,5 @@ namespace NavySeal.API.Services;
 
 public interface ISeaLionGenerator
 {
-    SeaLionMetadata Generate();
+    SeaLionMetadata Generate(SeaLionGenerationOptions? options = null);
 }

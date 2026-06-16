@@ -35,6 +35,8 @@ export interface SeaLionMetadata {
   backgroundStyle?: string
   waveIntensity?: number
   name: string
+  quality?: string
+  age?: number
 }
 
 export interface SeaLionDto {
@@ -59,4 +61,9 @@ export interface AuthResponse {
 
 export interface SeaLionListResponse {
   items: SeaLionDto[]
+}
+
+export interface GenerateSeaLionRequest {
+  quality?: string
+  age?: number
 }

@@ -1,0 +1,130 @@
+{
+  "common": {
+    "or": "или",
+    "loading": "Загрузка...",
+    "errorLoading": "Ошибка загрузки"
+  },
+  "auth": {
+    "login": "Войти",
+    "register": "Регистрация",
+    "logout": "Выйти",
+    "username": "Имя пользователя",
+    "email": "Email",
+    "password": "Пароль",
+    "loginTitle": "Вход",
+    "registerTitle": "Регистрация",
+    "noAccount": "Нет аккаунта? Зарегистрироваться",
+    "alreadyHaveAccount": "Уже есть аккаунт? Войти",
+    "submitLogin": "Войти",
+    "submitRegister": "Зарегистрироваться",
+    "submitLoggingIn": "Входим...",
+    "noAccountPrefix": "Нет аккаунта? ",
+    "noAccountAction": "Зарегистрироваться",
+    "alreadyHaveAccountPrefix": "Уже есть аккаунт? ",
+    "alreadyHaveAccountAction": "Войти",
+    "submitRegisterLoading": "Регистрируем..."
+  },
+  "header": {
+    "profile": "Профиль"
+  },
+  "generator": {
+    "title": "Генератор морских котиков",
+    "subtitle": "Нажми кнопку — получи уникальные метаданные и отрисованного котика",
+    "generate": "Сгенерировать",
+    "generating": "Генерируем...",
+    "authHintPrefix": "Чтобы генерировать, ",
+    "authHintSuffix": " или зарегистрируйтесь.",
+    "previewPlaceholder": "Здесь появится твой морской котик"
+  },
+  "seaLionMeta": {
+    "pose": "Поза",
+    "expression": "Выражение",
+    "pattern": "Узор",
+    "eyeStyle": "Глаза",
+    "hat": "Шляпа",
+    "accessory": "Аксессуар",
+    "quality": "Качество",
+    "age": "Возраст",
+    "ageYears_one": "{{count}} год",
+    "ageYears_few": "{{count}} года",
+    "ageYears_many": "{{count}} лет",
+    "ageYears_other": "{{count}} лет"
+  },
+  "expression": {
+    "happy": "счастливый",
+    "curious": "любопытный",
+    "chill": "спокойный",
+    "surprised": "удивлённый"
+  },
+  "pattern": {
+    "solid": "однотонный",
+    "spots": "пятнышки",
+    "stripes": "полоски",
+    "speckles": "мелкая россыпь",
+    "patchy": "пятнистость"
+  },
+  "eyeStyle": {
+    "round": "круглые",
+    "sleepy": "сонные",
+    "wink": "подмигивающие"
+  },
+  "hat": {
+    "captain": "капитан",
+    "party": "вечеринка",
+    "sailor": "моряк",
+    "crown": "корона"
+  },
+  "accessory": {
+    "ball": "мячик",
+    "fish": "рыбка",
+    "anchor": "якорь",
+    "starfish": "морская звезда"
+  },
+  "recent": {
+    "title": "Недавно сгенерированные",
+    "empty": "Пока никто не сгенерировал котиков"
+  },
+  "profile": {
+    "title": "Профиль @{{username}}",
+    "emptyTitle": "Войдите, чтобы увидеть свой профиль",
+    "emptyAction": "Войти",
+    "noSealsTitle": "У вас пока нет морских котиков",
+    "noSealsAction": "Сгенерировать первого",
+    "countSeal_one": "{{count}} котик",
+    "countSeal_few": "{{count}} котика",
+    "countSeal_many": "{{count}} котиков",
+    "countSeal_other": "{{count}} котиков",
+    "loading": "Загрузка..."
+  },
+  "errors": {
+    "generateFailed": "Не удалось сгенерировать",
+    "loadFailed": "Не удалось загрузить"
+  },
+  "validation": {
+    "username": {
+      "hint": "Только латиница, цифры и _. Символ @ не нужен — он добавляется автоматически.",
+      "required": "Укажите имя пользователя.",
+      "tooShort": "Имя пользователя должно быть не короче 3 символов.",
+      "tooLong": "Имя пользователя должно быть не длиннее 32 символов.",
+      "startsWithAt": "Не указывайте @ в имени пользователя.",
+      "invalidChars": "Имя может содержать только латинские буквы, цифры и _."
+    }
+  },
+  "pose": {
+    "upright": "стойка",
+    "lying": "лежит",
+    "sitting": "сидит",
+    "barking": "лает",
+    "swimming": "плывёт",
+    "stretching": "тянется",
+    "bellyUp": "на спине"
+  },
+  "quality": {
+    "common": "обычный",
+    "uncommon": "необычный",
+    "rare": "редкий",
+    "epic": "эпический",
+    "legendary": "легендарный"
+  }
+}
+

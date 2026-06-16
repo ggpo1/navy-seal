@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { AuthProvider, useAuth } from './context/AuthContext'
+import { useTranslation } from 'react-i18next'
 import { HomePage } from './pages/HomePage'
 import { LoginPage } from './pages/LoginPage'
 import { ProfilePage } from './pages/ProfilePage'
@@ -8,9 +9,10 @@ import { RegisterPage } from './pages/RegisterPage'
 
 function AppRoutes() {
   const { loading } = useAuth()
+  const { t } = useTranslation()
 
   if (loading) {
-    return <div className="loading-screen">Загрузка...</div>
+    return <div className="loading-screen">{t('common.loading')}</div>
   }
 
   return (

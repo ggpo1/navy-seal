@@ -1,8 +1,12 @@
 import { Link, Outlet } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../context/AuthContext'
+import { setLanguage } from '../i18n/i18n'
+import { formatUsernameLabel } from '../utils/username'
 
 export function Layout() {
   const { user, logout } = useAuth()
+  const { t, i18n } = useTranslation()
 
   return (
     <div className="app">
@@ -11,19 +15,30 @@ export function Layout() {
           🦭 Navy Seal
         </Link>
         <nav className="nav">
+          <select
+            className="lang-select"
+            value={i18n.language}
+            onChange={(e) => setLanguage(e.target.value as 'ru' | 'en' | 'zh')}
+            aria-label="Language"
+          >
+            <option value="ru">RU</option>
+            <option value="en">EN</option>
+            <option value="zh">中文</option>
+          </select>
+
           {user ? (
             <>
-              <Link to="/profile">Профиль</Link>
-              <span className="nav__user">@{user.username}</span>
+              <Link to="/profile">{t('header.profile')}</Link>
+              <span className="nav__user">{formatUsernameLabel(user.username)}</span>
               <button type="button" className="btn btn--ghost" onClick={logout}>
-                Выйти
+                {t('auth.logout')}
               </button>
             </>
           ) : (
             <>
-              <Link to="/login">Войти</Link>
+              <Link to="/login">{t('auth.login')}</Link>
               <Link to="/register" className="btn btn--primary">
-                Регистрация
+                {t('auth.register')}
               </Link>
             </>
           )}
