@@ -1,0 +1,11 @@
+**/.git
+**/.gitignore
+**/bin
+**/obj
+**/node_modules
+**/dist
+**/.vs
+**/.idea
+/context
+**/*.md
+!README.md

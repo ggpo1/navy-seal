@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: navy-seal-postgres
+    environment:
+      POSTGRES_USER: navyseal
+      POSTGRES_PASSWORD: navyseal
+      POSTGRES_DB: navyseal
+    ports:
+      - "5432:5432"
+    volumes:
+      - navy_seal_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U navyseal -d navyseal"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/NavySeal.API/Dockerfile
+    container_name: navy-seal-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=navyseal;Username=navyseal;Password=navyseal
+      Jwt__Key: NavySeal-SuperSecret-Key-Min32Chars-Long!
+      Jwt__Issuer: NavySeal.API
+      Jwt__Audience: NavySeal.Client
+      Jwt__ExpiresMinutes: 1440
+      Cors__Origins__0: http://localhost:3000
+    ports:
+      - "5280:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: navy-seal-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  navy_seal_pg_data:

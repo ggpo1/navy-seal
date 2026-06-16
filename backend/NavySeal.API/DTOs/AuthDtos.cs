@@ -1,0 +1,6 @@
+namespace NavySeal.API.DTOs;
+
+public record RegisterRequest(string Username, string Email, string Password);
+public record LoginRequest(string Username, string Password);
+public record AuthResponse(string Token, UserDto User);
+public record UserDto(Guid Id, string Username, string Email, DateTime CreatedAt);
