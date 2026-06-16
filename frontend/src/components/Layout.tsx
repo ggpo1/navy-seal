@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { setLanguage } from '../i18n/i18n'
 import { formatUsernameLabel } from '../utils/username'
+import { UserSearch } from './UserSearch'
 
 export function Layout() {
   const { user, logout } = useAuth()
@@ -17,6 +18,8 @@ export function Layout() {
           🦭 Navy Seal
         </Link>
         <nav className="nav">
+          <UserSearch />
+
           <select
             className="lang-select"
             value={i18n.language}
@@ -30,7 +33,7 @@ export function Layout() {
 
           {user ? (
             <>
-              <Link to="/profile">{t('header.profile')}</Link>
+              <Link to={`/users/${user.username.replace(/^@+/, '')}`}>{t('header.profile')}</Link>
               <span className="nav__user">{formatUsernameLabel(user.username)}</span>
               <button type="button" className="btn btn--ghost" onClick={logout}>
                 {t('auth.logout')}

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NavySeal.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e8324ba947989263f8a6d5a004e8796642c3c1e5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+832d25c33b2ae20169e1a993f20f082b3a23d2f3")]
 [assembly: System.Reflection.AssemblyProductAttribute("NavySeal.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NavySeal.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

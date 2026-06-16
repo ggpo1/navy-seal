@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { api } from '../api/client'
 import type { SeaLionDto } from '../api/types'
 import { SeaLionCanvas } from '../components/SeaLionCanvas'
@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 export function HomePage() {
   const { user } = useAuth()
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [current, setCurrent] = useState<SeaLionDto | null>(null)
   const [recent, setRecent] = useState<SeaLionDto[]>([])
   const [generating, setGenerating] = useState(false)
@@ -37,6 +38,7 @@ export function HomePage() {
       const seal = await api.generateSeaLion()
       setCurrent(seal)
       await loadRecent()
+      navigate(`/sealions/${seal.id}`)
     } catch (e) {
       setError(e instanceof Error ? e.message : t('errors.generateFailed'))
     } finally {
@@ -138,11 +140,7 @@ export function HomePage() {
         ) : (
           <div className="recent__grid">
             {recent.map((seal) => (
-              <SeaLionCard
-                key={seal.id}
-                seal={seal}
-                onClick={() => setCurrent(seal)}
-              />
+              <SeaLionCard key={seal.id} seal={seal} showStats />
             ))}
           </div>
         )}

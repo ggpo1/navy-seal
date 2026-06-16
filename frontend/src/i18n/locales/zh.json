@@ -8,7 +8,16 @@
     "home": "海狮生成器 — Navy Seal",
     "profile": "个人资料 — Navy Seal",
     "login": "登录 — Navy Seal",
-    "register": "注册 — Navy Seal"
+    "register": "注册 — Navy Seal",
+    "seaLion": "海狮 — Navy Seal",
+    "userProfile": "用户资料 — Navy Seal"
+  },
+  "search": {
+    "placeholder": "搜索用户...",
+    "loading": "搜索中...",
+    "empty": "未找到用户",
+    "sealCount_one": "{{count}} 只海狮",
+    "sealCount_other": "{{count}} 只海狮"
   },
   "auth": {
     "login": "登录",
@@ -90,6 +99,9 @@
   },
   "profile": {
     "title": "个人资料 @{{username}}",
+    "publicTitle": "个人资料 @{{username}}",
+    "notFound": "未找到用户",
+    "noSealsPublic": "该用户还没有海狮",
     "emptyTitle": "请登录以查看你的个人资料",
     "emptyAction": "登录",
     "noSealsTitle": "你还没有海狮",
@@ -101,6 +113,36 @@
   "errors": {
     "generateFailed": "生成失败",
     "loadFailed": "加载失败"
+  },
+  "detail": {
+    "backHome": "返回首页",
+    "notFound": "未找到海狮",
+    "owner": "作者"
+  },
+  "rating": {
+    "title": "评分",
+    "hint": "点击星星进行 1–5 分评分。再次点击可取消评分。",
+    "authHintPrefix": "要评分，请先",
+    "authHintSuffix": "。",
+    "submitFailed": "保存评分失败"
+  },
+  "comments": {
+    "title": "评论",
+    "count_one": "{{count}} 条评论",
+    "count_other": "{{count}} 条评论",
+    "placeholder": "你的评论",
+    "submit": "发布",
+    "submitting": "发布中...",
+    "submitFailed": "发布评论失败",
+    "deleteFailed": "删除评论失败",
+    "empty": "暂无评论——来做第一个吧",
+    "authHintPrefix": "要评论，请先",
+    "authHintSuffix": "。",
+    "edit": "编辑",
+    "delete": "删除",
+    "save": "保存",
+    "cancel": "取消",
+    "edited": "已编辑"
   },
   "validation": {
     "username": {

@@ -1,13 +1,13 @@
 namespace NavySeal.API.Models;
 
-public class SeaLion
+public class Rating
 {
     public Guid Id { get; set; }
+    public Guid SeaLionId { get; set; }
+    public SeaLion SeaLion { get; set; } = null!;
     public Guid UserId { get; set; }
     public User User { get; set; } = null!;
-    public required SeaLionMetadata Metadata { get; set; }
+    public byte Value { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-    public ICollection<Comment> Comments { get; set; } = [];
-    public ICollection<Rating> Ratings { get; set; } = [];
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

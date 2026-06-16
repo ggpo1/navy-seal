@@ -7,8 +7,22 @@ public record SeaLionDto(
     Guid UserId,
     string Username,
     SeaLionMetadata Metadata,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    double AverageRating = 0,
+    int RatingCount = 0,
+    int CommentCount = 0);
 
 public record SeaLionListResponse(IReadOnlyList<SeaLionDto> Items);
+
+public record SeaLionDetailDto(
+    Guid Id,
+    Guid UserId,
+    string Username,
+    Models.SeaLionMetadata Metadata,
+    DateTime CreatedAt,
+    double AverageRating,
+    int RatingCount,
+    int? UserRating,
+    int CommentCount);
 
 public record GenerateSeaLionRequest(string? Quality = null, int? Age = null);

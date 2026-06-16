@@ -8,7 +8,18 @@
     "home": "Генератор морских котиков — Navy Seal",
     "profile": "Профиль — Navy Seal",
     "login": "Вход — Navy Seal",
-    "register": "Регистрация — Navy Seal"
+    "register": "Регистрация — Navy Seal",
+    "seaLion": "Морской котик — Navy Seal",
+    "userProfile": "Профиль пользователя — Navy Seal"
+  },
+  "search": {
+    "placeholder": "Найти пользователя...",
+    "loading": "Ищем...",
+    "empty": "Никого не нашли",
+    "sealCount_one": "{{count}} котик",
+    "sealCount_few": "{{count}} котика",
+    "sealCount_many": "{{count}} котиков",
+    "sealCount_other": "{{count}} котиков"
   },
   "auth": {
     "login": "Войти",
@@ -92,6 +103,9 @@
   },
   "profile": {
     "title": "Профиль @{{username}}",
+    "publicTitle": "Профиль @{{username}}",
+    "notFound": "Пользователь не найден",
+    "noSealsPublic": "У пользователя пока нет морских котиков",
     "emptyTitle": "Войдите, чтобы увидеть свой профиль",
     "emptyAction": "Войти",
     "noSealsTitle": "У вас пока нет морских котиков",
@@ -105,6 +119,38 @@
   "errors": {
     "generateFailed": "Не удалось сгенерировать",
     "loadFailed": "Не удалось загрузить"
+  },
+  "detail": {
+    "backHome": "На главную",
+    "notFound": "Котик не найден",
+    "owner": "Автор"
+  },
+  "rating": {
+    "title": "Оценка",
+    "hint": "Нажми на звезду, чтобы поставить оценку от 1 до 5. Повторный клик снимает оценку.",
+    "authHintPrefix": "Чтобы оценить, ",
+    "authHintSuffix": ".",
+    "submitFailed": "Не удалось сохранить оценку"
+  },
+  "comments": {
+    "title": "Комментарии",
+    "count_one": "{{count}} комментарий",
+    "count_few": "{{count}} комментария",
+    "count_many": "{{count}} комментариев",
+    "count_other": "{{count}} комментариев",
+    "placeholder": "Твой комментарий",
+    "submit": "Отправить",
+    "submitting": "Отправляем...",
+    "submitFailed": "Не удалось отправить комментарий",
+    "deleteFailed": "Не удалось удалить комментарий",
+    "empty": "Пока нет комментариев — будь первым",
+    "authHintPrefix": "Чтобы комментировать, ",
+    "authHintSuffix": ".",
+    "edit": "Изменить",
+    "delete": "Удалить",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "edited": "изменён"
   },
   "validation": {
     "username": {

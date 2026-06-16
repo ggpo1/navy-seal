@@ -1,4 +1,16 @@
-import type { AuthResponse, GenerateSeaLionRequest, SeaLionDto, SeaLionListResponse, UserDto } from './types'
+import type {
+  AuthResponse,
+  CommentDto,
+  CommentListResponse,
+  GenerateSeaLionRequest,
+  PublicUserProfileDto,
+  RatingSummaryDto,
+  SeaLionDetailDto,
+  SeaLionDto,
+  SeaLionListResponse,
+  UserDto,
+  UserSearchResponse,
+} from './types'
 
 const TOKEN_KEY = 'navy_seal_token'
 
@@ -30,6 +42,10 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   if (!response.ok) {
     const body = await response.json().catch(() => ({}))
     throw new Error(body.message ?? `Ошибка ${response.status}`)
+  }
+
+  if (response.status === 204) {
+    return undefined as T
   }
 
   return response.json() as Promise<T>
@@ -67,5 +83,53 @@ export const api = {
 
   getMySeaLions() {
     return request<SeaLionListResponse>('/api/sealions/my')
+  },
+
+  getSeaLion(id: string) {
+    return request<SeaLionDetailDto>(`/api/sealions/${id}`)
+  },
+
+  getComments(seaLionId: string) {
+    return request<CommentListResponse>(`/api/sealions/${seaLionId}/comments`)
+  },
+
+  createComment(seaLionId: string, text: string) {
+    return request<CommentDto>(`/api/sealions/${seaLionId}/comments`, {
+      method: 'POST',
+      body: JSON.stringify({ text }),
+    })
+  },
+
+  updateComment(commentId: string, text: string) {
+    return request<CommentDto>(`/api/comments/${commentId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ text }),
+    })
+  },
+
+  deleteComment(commentId: string) {
+    return request<void>(`/api/comments/${commentId}`, { method: 'DELETE' })
+  },
+
+  upsertRating(seaLionId: string, value: number) {
+    return request<RatingSummaryDto>(`/api/sealions/${seaLionId}/rating`, {
+      method: 'PUT',
+      body: JSON.stringify({ value }),
+    })
+  },
+
+  removeRating(seaLionId: string) {
+    return request<RatingSummaryDto>(`/api/sealions/${seaLionId}/rating`, {
+      method: 'DELETE',
+    })
+  },
+
+  searchUsers(query: string, limit = 8) {
+    const params = new URLSearchParams({ q: query, limit: String(limit) })
+    return request<UserSearchResponse>(`/api/users/search?${params}`)
+  },
+
+  getUserProfile(username: string) {
+    return request<PublicUserProfileDto>(`/api/users/${encodeURIComponent(username)}`)
   },
 }

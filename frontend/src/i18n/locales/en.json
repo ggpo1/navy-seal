@@ -8,7 +8,16 @@
     "home": "Sea Lion Generator — Navy Seal",
     "profile": "Profile — Navy Seal",
     "login": "Log in — Navy Seal",
-    "register": "Register — Navy Seal"
+    "register": "Register — Navy Seal",
+    "seaLion": "Sea Lion — Navy Seal",
+    "userProfile": "User profile — Navy Seal"
+  },
+  "search": {
+    "placeholder": "Find a user...",
+    "loading": "Searching...",
+    "empty": "No users found",
+    "sealCount_one": "{{count}} sea lion",
+    "sealCount_other": "{{count}} sea lions"
   },
   "auth": {
     "login": "Log in",
@@ -90,6 +99,9 @@
   },
   "profile": {
     "title": "Profile @{{username}}",
+    "publicTitle": "Profile @{{username}}",
+    "notFound": "User not found",
+    "noSealsPublic": "This user has no sea lions yet",
     "emptyTitle": "Log in to see your profile",
     "emptyAction": "Log in",
     "noSealsTitle": "You don't have any sea lions yet",
@@ -101,6 +113,36 @@
   "errors": {
     "generateFailed": "Failed to generate",
     "loadFailed": "Failed to load"
+  },
+  "detail": {
+    "backHome": "Back to home",
+    "notFound": "Sea lion not found",
+    "owner": "Owner"
+  },
+  "rating": {
+    "title": "Rating",
+    "hint": "Click a star to rate from 1 to 5. Click again to remove your rating.",
+    "authHintPrefix": "To rate, ",
+    "authHintSuffix": ".",
+    "submitFailed": "Failed to save rating"
+  },
+  "comments": {
+    "title": "Comments",
+    "count_one": "{{count}} comment",
+    "count_other": "{{count}} comments",
+    "placeholder": "Your comment",
+    "submit": "Post",
+    "submitting": "Posting...",
+    "submitFailed": "Failed to post comment",
+    "deleteFailed": "Failed to delete comment",
+    "empty": "No comments yet — be the first",
+    "authHintPrefix": "To comment, ",
+    "authHintSuffix": ".",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edited": "edited"
   },
   "validation": {
     "username": {

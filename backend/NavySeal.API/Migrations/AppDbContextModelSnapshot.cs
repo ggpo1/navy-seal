@@ -19,6 +19,71 @@ namespace NavySeal.API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("NavySeal.API.Models.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("SeaLionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SeaLionId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("SeaLionId", "CreatedAt");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("NavySeal.API.Models.Rating", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("SeaLionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<byte>("Value")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SeaLionId");
+
+                    b.HasIndex("UserId", "SeaLionId")
+                        .IsUnique();
+
+                    b.ToTable("Ratings");
+                });
+
             modelBuilder.Entity("NavySeal.API.Models.SeaLion", b =>
                 {
                     b.Property<Guid>("Id")
@@ -78,6 +143,44 @@ namespace NavySeal.API.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("NavySeal.API.Models.Comment", b =>
+                {
+                    b.HasOne("NavySeal.API.Models.SeaLion", "SeaLion")
+                        .WithMany("Comments")
+                        .HasForeignKey("SeaLionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NavySeal.API.Models.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SeaLion");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("NavySeal.API.Models.Rating", b =>
+                {
+                    b.HasOne("NavySeal.API.Models.SeaLion", "SeaLion")
+                        .WithMany("Ratings")
+                        .HasForeignKey("SeaLionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NavySeal.API.Models.User", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SeaLion");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("NavySeal.API.Models.SeaLion", b =>
                 {
                     b.HasOne("NavySeal.API.Models.User", "User")
@@ -89,8 +192,19 @@ namespace NavySeal.API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("NavySeal.API.Models.SeaLion", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Ratings");
+                });
+
             modelBuilder.Entity("NavySeal.API.Models.User", b =>
                 {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Ratings");
+
                     b.Navigation("SeaLions");
                 });
 #pragma warning restore 612, 618

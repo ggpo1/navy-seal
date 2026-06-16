@@ -5,7 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { HomePage } from './pages/HomePage'
 import { LoginPage } from './pages/LoginPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { PublicProfilePage } from './pages/PublicProfilePage'
 import { RegisterPage } from './pages/RegisterPage'
+import { SeaLionDetailPage } from './pages/SeaLionDetailPage'
 
 function AppRoutes() {
   const { loading } = useAuth()
@@ -19,6 +21,8 @@ function AppRoutes() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
+        <Route path="sealions/:id" element={<SeaLionDetailPage />} />
+        <Route path="users/:username" element={<PublicProfilePage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />

@@ -57,6 +57,33 @@ export interface SeaLionDto {
   username: string
   metadata: SeaLionMetadata
   createdAt: string
+  averageRating?: number
+  ratingCount?: number
+  commentCount?: number
+}
+
+export interface SeaLionDetailDto extends SeaLionDto {
+  userRating: number | null
+}
+
+export interface CommentDto {
+  id: string
+  seaLionId: string
+  userId: string
+  username: string
+  text: string
+  createdAt: string
+  updatedAt: string | null
+}
+
+export interface CommentListResponse {
+  items: CommentDto[]
+}
+
+export interface RatingSummaryDto {
+  average: number
+  count: number
+  userRating: number | null
 }
 
 export interface UserDto {
@@ -78,4 +105,22 @@ export interface SeaLionListResponse {
 export interface GenerateSeaLionRequest {
   quality?: string
   age?: number
+}
+
+export interface UserSearchResultDto {
+  id: string
+  username: string
+  sealCount: number
+}
+
+export interface UserSearchResponse {
+  items: UserSearchResultDto[]
+}
+
+export interface PublicUserProfileDto {
+  id: string
+  username: string
+  createdAt: string
+  sealCount: number
+  seals: SeaLionDto[]
 }

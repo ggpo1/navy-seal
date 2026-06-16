@@ -12,6 +12,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
   public DbSet<User> Users => Set<User>();
   public DbSet<SeaLion> SeaLions => Set<SeaLion>();
+  public DbSet<Comment> Comments => Set<Comment>();
+  public DbSet<Rating> Ratings => Set<Rating>();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -44,6 +46,37 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
       entity.HasOne(s => s.User)
         .WithMany(u => u.SeaLions)
         .HasForeignKey(s => s.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
+    });
+
+    modelBuilder.Entity<Comment>(entity =>
+    {
+      entity.HasKey(c => c.Id);
+      entity.HasIndex(c => c.SeaLionId);
+      entity.HasIndex(c => new { c.SeaLionId, c.CreatedAt });
+      entity.Property(c => c.Text).HasMaxLength(1000);
+      entity.HasOne(c => c.SeaLion)
+        .WithMany(s => s.Comments)
+        .HasForeignKey(c => c.SeaLionId)
+        .OnDelete(DeleteBehavior.Cascade);
+      entity.HasOne(c => c.User)
+        .WithMany(u => u.Comments)
+        .HasForeignKey(c => c.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
+    });
+
+    modelBuilder.Entity<Rating>(entity =>
+    {
+      entity.HasKey(r => r.Id);
+      entity.HasIndex(r => new { r.UserId, r.SeaLionId }).IsUnique();
+      entity.HasIndex(r => r.SeaLionId);
+      entity.HasOne(r => r.SeaLion)
+        .WithMany(s => s.Ratings)
+        .HasForeignKey(r => r.SeaLionId)
+        .OnDelete(DeleteBehavior.Cascade);
+      entity.HasOne(r => r.User)
+        .WithMany(u => u.Ratings)
+        .HasForeignKey(r => r.UserId)
         .OnDelete(DeleteBehavior.Cascade);
     });
   }
