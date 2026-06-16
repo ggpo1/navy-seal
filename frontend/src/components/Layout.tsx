@@ -1,12 +1,14 @@
 import { Link, Outlet } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../context/AuthContext'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { setLanguage } from '../i18n/i18n'
 import { formatUsernameLabel } from '../utils/username'
 
 export function Layout() {
   const { user, logout } = useAuth()
   const { t, i18n } = useTranslation()
+  useDocumentTitle()
 
   return (
     <div className="app">

@@ -31,6 +31,7 @@ export function resolveTraits(m: SeaLionMetadata) {
     waveIntensity: m.waveIntensity ?? DEFAULTS.waveIntensity,
     backgroundStyle: m.backgroundStyle ?? 'waves',
     patternMarks: m.patternMarks ?? [],
+    backgroundMarks: m.backgroundMarks ?? [],
   }
 }
 

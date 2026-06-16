@@ -4,6 +4,15 @@ export interface PatternMark {
   radius: number
 }
 
+export interface BackgroundMark {
+  kind: string
+  x: number
+  y: number
+  size: number
+  opacity: number
+  rotation: number
+}
+
 export interface SeaLionMetadata {
   seed?: number
   bodyColor: string
@@ -32,8 +41,11 @@ export interface SeaLionMetadata {
   whiskers: boolean
   rotation: number
   backgroundColor: string
+  backgroundColorSecondary?: string | null
+  backgroundAccentColor?: string | null
   backgroundStyle?: string
   waveIntensity?: number
+  backgroundMarks?: BackgroundMark[]
   name: string
   quality?: string
   age?: number

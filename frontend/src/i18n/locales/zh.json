@@ -4,6 +4,12 @@
     "loading": "加载中...",
     "errorLoading": "加载失败"
   },
+  "meta": {
+    "home": "海狮生成器 — Navy Seal",
+    "profile": "个人资料 — Navy Seal",
+    "login": "登录 — Navy Seal",
+    "register": "注册 — Navy Seal"
+  },
   "auth": {
     "login": "登录",
     "register": "注册",

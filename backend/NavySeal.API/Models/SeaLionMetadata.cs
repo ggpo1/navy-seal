@@ -29,8 +29,11 @@ public class SeaLionMetadata
     public bool Whiskers { get; set; } = true;
     public double Rotation { get; set; }
     public string BackgroundColor { get; set; } = "#87CEEB";
+    public string? BackgroundColorSecondary { get; set; }
+    public string? BackgroundAccentColor { get; set; }
     public string BackgroundStyle { get; set; } = "waves";
     public double WaveIntensity { get; set; } = 1.0;
+    public List<BackgroundMark> BackgroundMarks { get; set; } = [];
     public string Name { get; set; } = "Sea Lion";
     public string Quality { get; set; } = "common";
     public int Age { get; set; }

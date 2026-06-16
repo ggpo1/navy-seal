@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { SeaLionMetadata } from '../api/types'
+import { drawBackground } from './backgroundRenderer'
 import { resolveTraits, scaleBody } from './sealTraits'
 
 const DESIGN_EXTENT = 150
@@ -92,9 +93,6 @@ function drawSeaLion(
 ) {
   ctx.clearRect(0, 0, w, h)
 
-  ctx.fillStyle = m.backgroundColor
-  ctx.fillRect(0, 0, w, h)
-
   drawBackground(ctx, m, w, h)
 
   const labelReserve = showLabel ? 24 : 0
@@ -142,34 +140,6 @@ function drawSeaLion(
     ctx.font = `bold ${fontSize}px system-ui, sans-serif`
     ctx.textAlign = 'center'
     ctx.fillText(m.name, cx, h - Math.max(8, fontSize * 0.75))
-  }
-}
-
-function drawBackground(ctx: CanvasRenderingContext2D, m: SeaLionMetadata, w: number, h: number) {
-  const { backgroundStyle, waveIntensity } = resolveTraits(m)
-
-  if (backgroundStyle === 'gradient') {
-    const gradient = ctx.createLinearGradient(0, 0, 0, h)
-    gradient.addColorStop(0, m.backgroundColor)
-    gradient.addColorStop(1, 'rgba(255,255,255,0.55)')
-    ctx.fillStyle = gradient
-    ctx.fillRect(0, 0, w, h)
-  }
-
-  if (backgroundStyle === 'plain') return
-
-  ctx.strokeStyle = `rgba(255,255,255,${0.2 + waveIntensity * 0.12})`
-  ctx.lineWidth = 1 + waveIntensity * 0.8
-  const waveCount = backgroundStyle === 'waves' ? 3 : 2
-  for (let i = 0; i < waveCount; i++) {
-    ctx.beginPath()
-    const y = h * (0.72 + i * 0.06)
-    ctx.moveTo(0, y)
-    for (let x = 0; x <= w; x += 16) {
-      const amp = (3 + waveIntensity * 3) * (1 + i * 0.2)
-      ctx.lineTo(x, y + Math.sin((x + i * 40 + (m.seed ?? 0)) * 0.04) * amp)
-    }
-    ctx.stroke()
   }
 }
 

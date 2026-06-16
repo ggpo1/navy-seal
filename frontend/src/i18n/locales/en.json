@@ -4,6 +4,12 @@
     "loading": "Loading...",
     "errorLoading": "Failed to load"
   },
+  "meta": {
+    "home": "Sea Lion Generator — Navy Seal",
+    "profile": "Profile — Navy Seal",
+    "login": "Log in — Navy Seal",
+    "register": "Register — Navy Seal"
+  },
   "auth": {
     "login": "Log in",
     "register": "Register",

@@ -2,30 +2,28 @@ namespace NavySeal.API.Services;
 
 public static class SeaLionColorGenerator
 {
-    public record Palette(string Body, string Belly, string Nose, string Background);
+    public record Palette(string Body, string Belly, string Nose);
 
     public static Palette Generate(Random rng)
     {
         var bodyHue = NextDouble(rng, 0, 360);
-        var body = ToHex(bodyHue, NextDouble(rng, 0.15, 0.75), NextDouble(rng, 0.28, 0.62));
+        var body = FromHsl(bodyHue, NextDouble(rng, 0.15, 0.75), NextDouble(rng, 0.28, 0.62));
 
-        var belly = ToHex(
+        var belly = FromHsl(
             bodyHue + NextDouble(rng, -12, 12),
             NextDouble(rng, 0.08, 0.45),
             NextDouble(rng, 0.72, 0.93));
 
-        var nose = ToHex(
+        var nose = FromHsl(
             bodyHue + NextDouble(rng, -8, 8),
             NextDouble(rng, 0.25, 0.85),
             NextDouble(rng, 0.08, 0.22));
 
-        var background = ToHex(
-            NextDouble(rng, 0, 360),
-            NextDouble(rng, 0.12, 0.78),
-            NextDouble(rng, 0.48, 0.88));
-
-        return new Palette(body, belly, nose, background);
+        return new Palette(body, belly, nose);
     }
+
+    public static string FromHsl(double hue, double saturation, double lightness) =>
+        ToHex(hue, saturation, lightness);
 
     private static double NextDouble(Random rng, double min, double max) =>
         min + rng.NextDouble() * (max - min);

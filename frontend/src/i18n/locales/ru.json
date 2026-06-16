@@ -4,6 +4,12 @@
     "loading": "Загрузка...",
     "errorLoading": "Ошибка загрузки"
   },
+  "meta": {
+    "home": "Генератор морских котиков — Navy Seal",
+    "profile": "Профиль — Navy Seal",
+    "login": "Вход — Navy Seal",
+    "register": "Регистрация — Navy Seal"
+  },
   "auth": {
     "login": "Войти",
     "register": "Регистрация",

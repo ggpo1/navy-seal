@@ -13,7 +13,6 @@ public class SeaLionGenerator : ISeaLionGenerator
     private static readonly string[] Patterns = ["solid", "spots", "stripes", "speckles", "patchy"];
     private static readonly string?[] Hats = [null, "captain", "party", "sailor", "crown"];
     private static readonly string?[] Accessories = [null, "ball", "fish", "anchor", "starfish"];
-    private static readonly string[] BackgroundStyles = ["waves", "gradient", "plain"];
     private static readonly string[] Qualities = ["common", "uncommon", "rare", "epic", "legendary"];
     private static readonly (string Quality, int Weight)[] QualityWeights =
     [
@@ -37,6 +36,7 @@ public class SeaLionGenerator : ISeaLionGenerator
         var age = ResolveAge(options, rng);
         var colors = SeaLionColorGenerator.Generate(rng);
         var pattern = PickPattern(rng, quality);
+        var background = SeaLionBackgroundGenerator.Generate(rng, quality);
 
         var metadata = new SeaLionMetadata
         {
@@ -66,9 +66,12 @@ public class SeaLionGenerator : ISeaLionGenerator
             Accessory = PickAccessory(rng, quality),
             Whiskers = rng.NextDouble() > 0.12,
             Rotation = Round(rng, -20, 20),
-            BackgroundColor = colors.Background,
-            BackgroundStyle = Pick(rng, BackgroundStyles),
-            WaveIntensity = Round(rng, 0.5, 1.6),
+            BackgroundColor = background.PrimaryColor,
+            BackgroundColorSecondary = background.SecondaryColor,
+            BackgroundAccentColor = background.AccentColor,
+            BackgroundStyle = background.Style,
+            WaveIntensity = background.WaveIntensity,
+            BackgroundMarks = background.Marks,
             Name = SeaLionNameGenerator.Generate(rng),
             Quality = quality,
             Age = age
@@ -195,9 +198,6 @@ public class SeaLionGenerator : ISeaLionGenerator
             "rare" => Round(Math.Max(metadata.PatternOpacity, 0.12)),
             _ => metadata.PatternOpacity
         };
-
-        if (quality is "legendary" or "epic")
-            metadata.WaveIntensity = Round(Math.Max(metadata.WaveIntensity, 1.1));
     }
 
     private static T Pick<T>(Random rng, T[] items) => items[rng.Next(items.Length)];
