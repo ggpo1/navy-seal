@@ -177,7 +177,8 @@
   "detail": {
     "backHome": "返回首页",
     "notFound": "未找到海狮",
-    "owner": "作者"
+    "owner": "作者",
+    "generateAnother": "再生成一只"
   },
   "share": {
     "copyLink": "复制链接",

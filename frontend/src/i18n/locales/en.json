@@ -177,7 +177,8 @@
   "detail": {
     "backHome": "Back to home",
     "notFound": "Sea lion not found",
-    "owner": "Owner"
+    "owner": "Owner",
+    "generateAnother": "Generate another"
   },
   "share": {
     "copyLink": "Copy link",

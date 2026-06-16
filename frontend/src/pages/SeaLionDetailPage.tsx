@@ -23,6 +23,7 @@ export function SeaLionDetailPage() {
   const [loading, setLoading] = useState(true)
   const [ratingLoading, setRatingLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
+  const [generating, setGenerating] = useState(false)
   const [linkCopied, setLinkCopied] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -97,6 +98,21 @@ export function SeaLionDetailPage() {
     }
   }
 
+  const handleGenerateAnother = async () => {
+    if (!user) return
+
+    setGenerating(true)
+    setError(null)
+    try {
+      const newSeal = await api.generateSeaLion()
+      navigate(`/sealions/${newSeal.id}`)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t('errors.generateFailed'))
+    } finally {
+      setGenerating(false)
+    }
+  }
+
   if (loading) {
     return <p className="detail__loading">{t('common.loading')}</p>
   }
@@ -125,6 +141,16 @@ export function SeaLionDetailPage() {
           <h1>{seal.metadata.name}</h1>
 
           <div className="detail__actions">
+            {user && (
+              <button
+                type="button"
+                className="btn btn--generate"
+                onClick={handleGenerateAnother}
+                disabled={generating}
+              >
+                {generating ? t('generator.generating') : `✨ ${t('detail.generateAnother')}`}
+              </button>
+            )}
             <button
               type="button"
               className="btn btn--ghost"

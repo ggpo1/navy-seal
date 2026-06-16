@@ -183,7 +183,8 @@
   "detail": {
     "backHome": "На главную",
     "notFound": "Котик не найден",
-    "owner": "Автор"
+    "owner": "Автор",
+    "generateAnother": "Сгенерировать ещё"
   },
   "share": {
     "copyLink": "Скопировать ссылку",
