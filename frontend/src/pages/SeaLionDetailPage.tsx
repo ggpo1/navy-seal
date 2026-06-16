@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api/client'
 import type { CommentDto, SeaLionDetailDto } from '../api/types'
 import { CommentSection } from '../components/CommentSection'
-import { SeaLionCanvas } from '../components/SeaLionCanvas'
+import { SeaLionCanvas, type SeaLionCanvasHandle } from '../components/SeaLionCanvas'
 import { StarRating } from '../components/StarRating'
 import { useAuth } from '../context/AuthContext'
+import { useSeaLionShareMeta } from '../hooks/useSeaLionShareMeta'
+import { copyTextToClipboard, getSeaLionShareUrl } from '../utils/share'
 import { formatUsernameLabel } from '../utils/username'
 import { qualityClassName, resolveSeaLionQuality } from '../utils/sealQuality'
 
@@ -15,11 +17,16 @@ export function SeaLionDetailPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { t } = useTranslation()
+  const canvasRef = useRef<SeaLionCanvasHandle>(null)
   const [seal, setSeal] = useState<SeaLionDetailDto | null>(null)
   const [comments, setComments] = useState<CommentDto[]>([])
   const [loading, setLoading] = useState(true)
   const [ratingLoading, setRatingLoading] = useState(false)
+  const [exporting, setExporting] = useState(false)
+  const [linkCopied, setLinkCopied] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useSeaLionShareMeta(seal)
 
   useEffect(() => {
     if (!id) return
@@ -63,6 +70,33 @@ export function SeaLionDetailPage() {
     }
   }
 
+  const handleCopyLink = async () => {
+    if (!id) return
+
+    setError(null)
+    try {
+      await copyTextToClipboard(getSeaLionShareUrl(id))
+      setLinkCopied(true)
+      window.setTimeout(() => setLinkCopied(false), 2000)
+    } catch {
+      setError(t('share.copyFailed'))
+    }
+  }
+
+  const handleExportPng = async () => {
+    if (!seal) return
+
+    setExporting(true)
+    setError(null)
+    try {
+      await canvasRef.current?.exportPng(seal.metadata.name)
+    } catch {
+      setError(t('share.exportFailed'))
+    } finally {
+      setExporting(false)
+    }
+  }
+
   if (loading) {
     return <p className="detail__loading">{t('common.loading')}</p>
   }
@@ -84,11 +118,29 @@ export function SeaLionDetailPage() {
 
       <div className={`detail__hero ${qualityClassName(seal.metadata.quality)}`}>
         <div className="detail__canvas">
-          <SeaLionCanvas metadata={seal.metadata} width={420} height={420} />
+          <SeaLionCanvas ref={canvasRef} metadata={seal.metadata} width={420} height={420} />
         </div>
 
         <div className="detail__info">
           <h1>{seal.metadata.name}</h1>
+
+          <div className="detail__actions">
+            <button
+              type="button"
+              className="btn btn--ghost"
+              onClick={handleCopyLink}
+            >
+              {linkCopied ? t('share.copied') : t('share.copyLink')}
+            </button>
+            <button
+              type="button"
+              className="btn btn--ghost"
+              onClick={handleExportPng}
+              disabled={exporting}
+            >
+              {exporting ? t('share.exporting') : t('share.downloadPng')}
+            </button>
+          </div>
           <p className="detail__owner">
             {t('detail.owner')}:{' '}
             <Link to={`/users/${seal.username.replace(/^@+/, '')}`}>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { SeaLionMetadata } from '../api/types'
 import { drawBackground } from './backgroundRenderer'
@@ -14,13 +14,20 @@ interface Props {
   showLabel?: boolean
 }
 
-export function SeaLionCanvas({
-  metadata,
-  width,
-  height,
-  className,
-  showLabel = false,
-}: Props) {
+export interface SeaLionCanvasHandle {
+  exportPng: (filename?: string, size?: number) => Promise<void>
+}
+
+export const SeaLionCanvas = forwardRef<SeaLionCanvasHandle, Props>(function SeaLionCanvas(
+  {
+    metadata,
+    width,
+    height,
+    className,
+    showLabel = false,
+  },
+  ref,
+) {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { t } = useTranslation()
@@ -68,6 +75,36 @@ export function SeaLionCanvas({
     drawSeaLion(ctx, metadata, w, h, showLabel)
   }, [metadata, drawSize, showLabel])
 
+  useImperativeHandle(ref, () => ({
+    exportPng: async (filename, size = 1024) => {
+      const offscreen = document.createElement('canvas')
+      offscreen.width = size
+      offscreen.height = size
+      const ctx = offscreen.getContext('2d')
+      if (!ctx) return
+
+      drawSeaLion(ctx, metadata, size, size, true)
+
+      await new Promise<void>((resolve) => {
+        offscreen.toBlob((blob) => {
+          if (!blob) {
+            resolve()
+            return
+          }
+
+          const url = URL.createObjectURL(blob)
+          const link = document.createElement('a')
+          const baseName = (filename ?? metadata.name).replace(/[^\w\u0400-\u04FF.-]+/g, '_')
+          link.download = baseName.endsWith('.png') ? baseName : `${baseName}.png`
+          link.href = url
+          link.click()
+          URL.revokeObjectURL(url)
+          resolve()
+        }, 'image/png')
+      })
+    },
+  }), [metadata])
+
   const fixedSize = width != null && height != null
 
   return (
@@ -82,7 +119,7 @@ export function SeaLionCanvas({
       />
     </div>
   )
-}
+})
 
 function drawSeaLion(
   ctx: CanvasRenderingContext2D,

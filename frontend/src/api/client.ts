@@ -81,6 +81,15 @@ export const api = {
     return request<SeaLionListResponse>(`/api/sealions/recent?limit=${limit}`)
   },
 
+  getTop(period: 'week' | 'all', limit = 12, minRatings = 1) {
+    const params = new URLSearchParams({
+      period,
+      limit: String(limit),
+      minRatings: String(minRatings),
+    })
+    return request<SeaLionListResponse>(`/api/sealions/top?${params}`)
+  },
+
   getMySeaLions() {
     return request<SeaLionListResponse>('/api/sealions/my')
   },

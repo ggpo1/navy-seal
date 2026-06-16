@@ -26,3 +26,13 @@ public record SeaLionDetailDto(
     int CommentCount);
 
 public record GenerateSeaLionRequest(string? Quality = null, int? Age = null);
+
+public static class SeaLionTopPeriods
+{
+    public const string Week = "week";
+    public const string All = "all";
+
+    public static bool IsValid(string? period) =>
+        string.Equals(period, Week, StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(period, All, StringComparison.OrdinalIgnoreCase);
+}

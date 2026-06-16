@@ -97,6 +97,15 @@
     "title": "最近生成的",
     "empty": "目前还没有人生成海狮"
   },
+  "feed": {
+    "tabsLabel": "海狮列表",
+    "recent": "最新",
+    "week": "本周热门",
+    "best": "最佳",
+    "topWeek": "本周最佳",
+    "emptyWeek": "本周还没有带评分的海狮",
+    "emptyBest": "还没有带评分的海狮"
+  },
   "profile": {
     "title": "个人资料 @{{username}}",
     "publicTitle": "个人资料 @{{username}}",
@@ -118,6 +127,15 @@
     "backHome": "返回首页",
     "notFound": "未找到海狮",
     "owner": "作者"
+  },
+  "share": {
+    "copyLink": "复制链接",
+    "copied": "链接已复制",
+    "copyFailed": "无法复制链接",
+    "downloadPng": "下载 PNG",
+    "exporting": "保存中...",
+    "exportFailed": "无法保存 PNG",
+    "description": "海狮 {{name}} — Navy Seal"
   },
   "rating": {
     "title": "评分",

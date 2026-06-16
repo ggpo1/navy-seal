@@ -8,27 +8,39 @@ import { useAuth } from '../context/AuthContext'
 import { qualityClassName, resolveSeaLionQuality } from '../utils/sealQuality'
 import { useTranslation } from 'react-i18next'
 
+type FeedMode = 'recent' | 'week' | 'best'
+
+const FEED_LIMIT = 24
+
 export function HomePage() {
   const { user } = useAuth()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [current, setCurrent] = useState<SeaLionDto | null>(null)
-  const [recent, setRecent] = useState<SeaLionDto[]>([])
+  const [feed, setFeed] = useState<SeaLionDto[]>([])
+  const [feedMode, setFeedMode] = useState<FeedMode>('recent')
+  const [feedLoading, setFeedLoading] = useState(false)
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const loadRecent = useCallback(async () => {
+  const loadFeed = useCallback(async (mode: FeedMode) => {
+    setFeedLoading(true)
     try {
-      const response = await api.getRecent(100)
-      setRecent(response.items)
+      const response =
+        mode === 'recent'
+          ? await api.getRecent(FEED_LIMIT)
+          : await api.getTop(mode === 'week' ? 'week' : 'all', FEED_LIMIT)
+      setFeed(response.items)
     } catch {
-      setRecent([])
+      setFeed([])
+    } finally {
+      setFeedLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    loadRecent()
-  }, [loadRecent])
+    loadFeed(feedMode)
+  }, [feedMode, loadFeed])
 
   const handleGenerate = async () => {
     if (!user) return
@@ -37,7 +49,7 @@ export function HomePage() {
     try {
       const seal = await api.generateSeaLion()
       setCurrent(seal)
-      await loadRecent()
+      await loadFeed(feedMode)
       navigate(`/sealions/${seal.id}`)
     } catch (e) {
       setError(e instanceof Error ? e.message : t('errors.generateFailed'))
@@ -45,6 +57,18 @@ export function HomePage() {
       setGenerating(false)
     }
   }
+
+  const feedTitle = {
+    recent: t('feed.recent'),
+    week: t('feed.topWeek'),
+    best: t('feed.best'),
+  }[feedMode]
+
+  const feedEmpty = {
+    recent: t('recent.empty'),
+    week: t('feed.emptyWeek'),
+    best: t('feed.emptyBest'),
+  }[feedMode]
 
   return (
     <div className="home">
@@ -134,12 +158,31 @@ export function HomePage() {
       </section>
 
       <section className="recent">
-        <h2>{t('recent.title')}</h2>
-        {recent.length === 0 ? (
-          <p className="recent__empty">{t('recent.empty')}</p>
+        <div className="feed__header">
+          <h2>{feedTitle}</h2>
+          <div className="feed__tabs" role="tablist" aria-label={t('feed.tabsLabel')}>
+            {(['recent', 'week', 'best'] as const).map((mode) => (
+              <button
+                key={mode}
+                type="button"
+                role="tab"
+                aria-selected={feedMode === mode}
+                className={`feed__tab ${feedMode === mode ? 'feed__tab--active' : ''}`}
+                onClick={() => setFeedMode(mode)}
+              >
+                {t(`feed.${mode}`)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {feedLoading ? (
+          <p className="recent__empty">{t('common.loading')}</p>
+        ) : feed.length === 0 ? (
+          <p className="recent__empty">{feedEmpty}</p>
         ) : (
           <div className="recent__grid">
-            {recent.map((seal) => (
+            {feed.map((seal) => (
               <SeaLionCard key={seal.id} seal={seal} showStats />
             ))}
           </div>

@@ -314,6 +314,51 @@ a:hover {
   margin-bottom: 1rem;
 }
 
+.feed__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.feed__header h2 {
+  margin: 0;
+  color: #1a3a4a;
+}
+
+.feed__tabs {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.25rem;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid #d8e8f0;
+  border-radius: 12px;
+}
+
+.feed__tab {
+  border: none;
+  background: transparent;
+  color: #5a7a8a;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.45rem 0.8rem;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.feed__tab:hover {
+  color: #1a3a4a;
+  background: rgba(26, 138, 170, 0.08);
+}
+
+.feed__tab--active {
+  background: #1a8aaa;
+  color: #fff;
+}
+
 .recent h2 {
   margin-bottom: 1rem;
   color: #1a3a4a;
@@ -614,6 +659,13 @@ a:hover {
 .detail__info h1 {
   margin-bottom: 0.35rem;
   color: #1a3a4a;
+}
+
+.detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
 }
 
 .detail__owner {

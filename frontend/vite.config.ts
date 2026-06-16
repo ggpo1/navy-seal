@@ -10,6 +10,10 @@ export default defineConfig({
         target: 'http://localhost:5280',
         changeOrigin: true,
       },
+      '/share': {
+        target: 'http://localhost:5280',
+        changeOrigin: true,
+      },
     },
   },
 })

@@ -49,6 +49,29 @@ public class SeaLionsController(
         return Ok(new SeaLionListResponse(items));
     }
 
+    [HttpGet("top")]
+    [ProducesResponseType(typeof(SeaLionListResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetTop(
+        [FromQuery] string period = SeaLionTopPeriods.All,
+        [FromQuery] int limit = 12,
+        [FromQuery] int minRatings = 1,
+        CancellationToken ct = default)
+    {
+        if (!SeaLionTopPeriods.IsValid(period))
+            return BadRequest(new { message = "Период должен быть week или all." });
+
+        try
+        {
+            var items = await seaLionService.GetTopAsync(period, limit, minRatings, ct);
+            return Ok(new SeaLionListResponse(items));
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
     [Authorize]
     [HttpGet("my")]
     [ProducesResponseType(typeof(SeaLionListResponse), StatusCodes.Status200OK)]
@@ -70,6 +93,24 @@ public class SeaLionsController(
     {
         var seaLion = await seaLionService.GetByIdAsync(id, GetUserId(), ct);
         return seaLion is null ? NotFound() : Ok(seaLion);
+    }
+
+    [HttpGet("{id:guid}/og-image")]
+    [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetOgImage(Guid id, CancellationToken ct)
+    {
+        var seaLion = await seaLionService.GetByIdAsync(id, null, ct);
+        if (seaLion is null)
+            return NotFound();
+
+        var png = SeaLionOgImageGenerator.Generate(
+            seaLion.Metadata,
+            seaLion.AverageRating,
+            seaLion.RatingCount);
+
+        return File(png, "image/png");
     }
 
     [HttpGet("{id:guid}/comments")]

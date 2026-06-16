@@ -97,6 +97,15 @@
     "title": "Recently generated",
     "empty": "No one has generated any sea lions yet"
   },
+  "feed": {
+    "tabsLabel": "Sea lion feed",
+    "recent": "Recent",
+    "week": "Top week",
+    "best": "Best",
+    "topWeek": "Top of the week",
+    "emptyWeek": "No rated sea lions this week yet",
+    "emptyBest": "No rated sea lions yet"
+  },
   "profile": {
     "title": "Profile @{{username}}",
     "publicTitle": "Profile @{{username}}",
@@ -118,6 +127,15 @@
     "backHome": "Back to home",
     "notFound": "Sea lion not found",
     "owner": "Owner"
+  },
+  "share": {
+    "copyLink": "Copy link",
+    "copied": "Link copied",
+    "copyFailed": "Could not copy the link",
+    "downloadPng": "Download PNG",
+    "exporting": "Saving...",
+    "exportFailed": "Could not save PNG",
+    "description": "Sea lion {{name}} on Navy Seal"
   },
   "rating": {
     "title": "Rating",

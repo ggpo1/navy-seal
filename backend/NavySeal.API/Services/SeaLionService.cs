@@ -10,6 +10,7 @@ public interface ISeaLionService
     Task<SeaLionDto> GenerateAsync(Guid userId, SeaLionGenerationOptions? options, CancellationToken ct);
     Task<SeaLionDetailDto?> GetByIdAsync(Guid id, Guid? viewerUserId, CancellationToken ct);
     Task<IReadOnlyList<SeaLionDto>> GetRecentAsync(int limit, CancellationToken ct);
+    Task<IReadOnlyList<SeaLionDto>> GetTopAsync(string period, int limit, int minRatings, CancellationToken ct);
     Task<IReadOnlyList<SeaLionDto>> GetByUserAsync(Guid userId, CancellationToken ct);
 }
 
@@ -80,6 +81,59 @@ public class SeaLionService(AppDbContext db, ISeaLionGenerator generator, IRatin
                 AverageRating = s.Ratings.Count == 0
                     ? 0.0
                     : s.Ratings.Average(r => (double)r.Value)
+            })
+            .ToListAsync(ct);
+
+        return items
+            .Select(s => new SeaLionDto(
+                s.Id,
+                s.UserId,
+                s.Username,
+                s.Metadata,
+                s.CreatedAt,
+                Math.Round(s.AverageRating, 2),
+                s.RatingCount,
+                s.CommentCount))
+            .ToList();
+    }
+
+    public async Task<IReadOnlyList<SeaLionDto>> GetTopAsync(
+        string period,
+        int limit,
+        int minRatings,
+        CancellationToken ct)
+    {
+        if (!SeaLionTopPeriods.IsValid(period))
+            throw new ArgumentException("Период должен быть week или all.");
+
+        var clampedLimit = Math.Clamp(limit, 1, 50);
+        var minRatingsClamped = Math.Clamp(minRatings, 1, 20);
+        var normalizedPeriod = period.ToLowerInvariant();
+
+        var query = db.SeaLions.AsNoTracking().AsQueryable();
+
+        if (normalizedPeriod == SeaLionTopPeriods.Week)
+        {
+            var since = DateTime.UtcNow.AddDays(-7);
+            query = query.Where(s => s.CreatedAt >= since);
+        }
+
+        var items = await query
+            .Where(s => s.Ratings.Count >= minRatingsClamped)
+            .OrderByDescending(s => s.Ratings.Average(r => (double)r.Value))
+            .ThenByDescending(s => s.Ratings.Count)
+            .ThenByDescending(s => s.CreatedAt)
+            .Take(clampedLimit)
+            .Select(s => new
+            {
+                s.Id,
+                s.UserId,
+                Username = s.User.Username,
+                s.Metadata,
+                s.CreatedAt,
+                RatingCount = s.Ratings.Count,
+                CommentCount = s.Comments.Count,
+                AverageRating = s.Ratings.Average(r => (double)r.Value)
             })
             .ToListAsync(ct);
 
