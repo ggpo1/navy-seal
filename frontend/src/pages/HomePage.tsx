@@ -75,6 +75,7 @@ export function HomePage() {
             <div className="preview__meta">
               <h2>{current.metadata.name}</h2>
               <dl>
+                <div><dt>Поза</dt><dd>{current.metadata.pose ?? 'upright'}</dd></div>
                 <div><dt>Выражение</dt><dd>{current.metadata.expression}</dd></div>
                 <div><dt>Узор</dt><dd>{current.metadata.pattern}</dd></div>
                 <div><dt>Глаза</dt><dd>{current.metadata.eyeStyle}</dd></div>

@@ -27,10 +27,10 @@ public static class SeaLionNameGenerator
         "Deckhand", "Lookout", "Pelican", "Otter", "Walrus", "Blubber"
     ];
 
-    public static string Generate()
+    public static string Generate(Random rng)
     {
-        var first = FirstWords[Random.Shared.Next(FirstWords.Length)];
-        var second = SecondWords[Random.Shared.Next(SecondWords.Length)];
+        var first = FirstWords[rng.Next(FirstWords.Length)];
+        var second = SecondWords[rng.Next(SecondWords.Length)];
         return $"{first} {second}";
     }
 }

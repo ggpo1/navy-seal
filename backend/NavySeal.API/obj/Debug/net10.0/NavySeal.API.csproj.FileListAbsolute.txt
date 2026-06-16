@@ -129,3 +129,4 @@
 /Users/vl.arkhangelskii/Desktop/backend/navy-seal/backend/NavySeal.API/obj/Debug/net10.0/NavySeal.API.pdb
 /Users/vl.arkhangelskii/Desktop/backend/navy-seal/backend/NavySeal.API/obj/Debug/net10.0/NavySeal.API.genruntimeconfig.cache
 /Users/vl.arkhangelskii/Desktop/backend/navy-seal/backend/NavySeal.API/obj/Debug/net10.0/ref/NavySeal.API.dll
+/Users/vl.arkhangelskii/Desktop/backend/navy-seal/backend/NavySeal.API/obj/Debug/net10.0/NavySeal.API.sourcelink.json
