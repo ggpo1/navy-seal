@@ -15,7 +15,11 @@ public record SeaLionDto(
     public IReadOnlyList<string> Badges { get; init; } = [];
 }
 
-public record SeaLionListResponse(IReadOnlyList<SeaLionDto> Items);
+public record SeaLionListResponse(
+    IReadOnlyList<SeaLionDto> Items,
+    int Total = 0,
+    int Page = 1,
+    int PageSize = 0);
 
 public record SeaLionDetailDto(
     Guid Id,

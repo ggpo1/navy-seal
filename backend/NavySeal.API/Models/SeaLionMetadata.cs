@@ -37,4 +37,5 @@ public class SeaLionMetadata
     public string Name { get; set; } = "Sea Lion";
     public string Quality { get; set; } = "common";
     public int Age { get; set; }
+    public List<SeaLionAward> Awards { get; set; } = [];
 }

@@ -19,9 +19,13 @@ public class UsersController(IUserService userService) : ControllerBase
     [HttpGet("{username}")]
     [ProducesResponseType(typeof(PublicUserProfileDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetProfile(string username, CancellationToken ct)
+    public async Task<IActionResult> GetProfile(
+        string username,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = Pagination.DefaultPageSize,
+        CancellationToken ct = default)
     {
-        var profile = await userService.GetPublicProfileAsync(username, ct);
+        var profile = await userService.GetPublicProfileAsync(username, page, pageSize, ct);
         return profile is null ? NotFound() : Ok(profile);
     }
 }

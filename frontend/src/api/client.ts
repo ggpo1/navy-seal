@@ -1,7 +1,9 @@
 import type {
   AuthResponse,
+  CastContestVoteResponse,
   CommentDto,
   CommentListResponse,
+  DailyContestDto,
   GenerateSeaLionRequest,
   PublicUserProfileDto,
   RatingSummaryDto,
@@ -77,8 +79,12 @@ export const api = {
     })
   },
 
-  getRecent(limit = 12) {
-    return request<SeaLionListResponse>(`/api/sealions/recent?limit=${limit}`)
+  getRecent(page = 1, pageSize = 12) {
+    const params = new URLSearchParams({
+      page: String(page),
+      pageSize: String(pageSize),
+    })
+    return request<SeaLionListResponse>(`/api/sealions/recent?${params}`)
   },
 
   getTop(period: 'week' | 'all', limit = 12, minRatings = 1) {
@@ -88,6 +94,11 @@ export const api = {
       minRatings: String(minRatings),
     })
     return request<SeaLionListResponse>(`/api/sealions/top?${params}`)
+  },
+
+  getDiscover(limit = 15) {
+    const params = new URLSearchParams({ limit: String(limit) })
+    return request<SeaLionListResponse>(`/api/sealions/discover?${params}`)
   },
 
   getMySeaLions() {
@@ -138,7 +149,24 @@ export const api = {
     return request<UserSearchResponse>(`/api/users/search?${params}`)
   },
 
-  getUserProfile(username: string) {
-    return request<PublicUserProfileDto>(`/api/users/${encodeURIComponent(username)}`)
+  getUserProfile(username: string, page = 1, pageSize = 12) {
+    const params = new URLSearchParams({
+      page: String(page),
+      pageSize: String(pageSize),
+    })
+    return request<PublicUserProfileDto>(
+      `/api/users/${encodeURIComponent(username)}?${params}`,
+    )
+  },
+
+  getDailyContest() {
+    return request<DailyContestDto>('/api/contests/daily')
+  },
+
+  voteDailyContest(seaLionId: string) {
+    return request<CastContestVoteResponse>('/api/contests/daily/vote', {
+      method: 'POST',
+      body: JSON.stringify({ seaLionId }),
+    })
   },
 }

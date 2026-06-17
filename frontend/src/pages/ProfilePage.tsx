@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useTranslation } from 'react-i18next'
+import { ProfileAuthSection } from '../components/ProfileAuthSection'
 
 export function ProfilePage() {
   const { user } = useAuth()
@@ -17,8 +18,9 @@ export function ProfilePage() {
   if (!user) {
     return (
       <div className="profile profile--empty">
-        <p>{t('profile.emptyTitle')}</p>
-        <Link to="/login" className="btn btn--primary">{t('profile.emptyAction')}</Link>
+        <h1>{t('profile.emptyTitle')}</h1>
+        <p className="profile__empty-hint">{t('profile.emptyHint')}</p>
+        <ProfileAuthSection />
       </div>
     )
   }

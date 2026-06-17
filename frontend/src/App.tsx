@@ -2,10 +2,12 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { useTranslation } from 'react-i18next'
+import { DiscoverPage } from './pages/DiscoverPage'
 import { HomePage } from './pages/HomePage'
 import { LoginPage } from './pages/LoginPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { PublicProfilePage } from './pages/PublicProfilePage'
+import { SearchPage } from './pages/SearchPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { SeaLionDetailPage } from './pages/SeaLionDetailPage'
 
@@ -21,6 +23,8 @@ function AppRoutes() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
+        <Route path="discover" element={<DiscoverPage />} />
+        <Route path="search" element={<SearchPage />} />
         <Route path="sealions/:id" element={<SeaLionDetailPage />} />
         <Route path="users/:username" element={<PublicProfilePage />} />
         <Route path="profile" element={<ProfilePage />} />

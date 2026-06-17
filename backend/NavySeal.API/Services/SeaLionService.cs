@@ -9,9 +9,10 @@ public interface ISeaLionService
 {
     Task<SeaLionDto> GenerateAsync(Guid userId, SeaLionGenerationOptions? options, CancellationToken ct);
     Task<SeaLionDetailDto?> GetByIdAsync(Guid id, Guid? viewerUserId, CancellationToken ct);
-    Task<IReadOnlyList<SeaLionDto>> GetRecentAsync(int limit, CancellationToken ct);
+    Task<PagedResponse<SeaLionDto>> GetRecentAsync(int page, int pageSize, CancellationToken ct);
     Task<IReadOnlyList<SeaLionDto>> GetTopAsync(string period, int limit, int minRatings, CancellationToken ct);
     Task<IReadOnlyList<SeaLionDto>> GetByUserAsync(Guid userId, CancellationToken ct);
+    Task<PagedResponse<SeaLionDto>> GetDiscoverAsync(Guid userId, int limit, CancellationToken ct);
 }
 
 public class SeaLionService(
@@ -67,14 +68,18 @@ public class SeaLionService(
             commentCount);
     }
 
-    public async Task<IReadOnlyList<SeaLionDto>> GetRecentAsync(int limit, CancellationToken ct)
+    public async Task<PagedResponse<SeaLionDto>> GetRecentAsync(int page, int pageSize, CancellationToken ct)
     {
-        var clampedLimit = Math.Clamp(limit, 1, 50);
+        var (normalizedPage, normalizedSize, skip) = Pagination.Normalize(page, pageSize);
 
-        var items = await db.SeaLions
-            .AsNoTracking()
+        var query = db.SeaLions.AsNoTracking();
+
+        var total = await query.CountAsync(ct);
+
+        var items = await query
             .OrderByDescending(s => s.CreatedAt)
-            .Take(clampedLimit)
+            .Skip(skip)
+            .Take(normalizedSize)
             .Select(s => new SeaLionListRow(
                 s.Id,
                 s.UserId,
@@ -88,7 +93,8 @@ public class SeaLionService(
                     : s.Ratings.Average(r => (double)r.Value)))
             .ToListAsync(ct);
 
-        return await ToDtoListAsync(items, ct);
+        var dtos = await ToDtoListAsync(items, ct);
+        return new PagedResponse<SeaLionDto>(dtos, total, normalizedPage, normalizedSize);
     }
 
     public async Task<IReadOnlyList<SeaLionDto>> GetTopAsync(
@@ -152,6 +158,68 @@ public class SeaLionService(
             .ToListAsync(ct);
 
         return await ToDtoListAsync(items, ct);
+    }
+
+    public async Task<PagedResponse<SeaLionDto>> GetDiscoverAsync(Guid userId, int limit, CancellationToken ct)
+    {
+        var clampedLimit = Math.Clamp(limit, 1, 50);
+
+        var query = db.SeaLions
+            .AsNoTracking()
+            .Where(s => s.UserId != userId)
+            .Where(s => !s.Ratings.Any(r => r.UserId == userId));
+
+        var total = await query.CountAsync(ct);
+        if (total == 0)
+            return new PagedResponse<SeaLionDto>([], 0, 1, clampedLimit);
+
+        var poolSize = Math.Min(total, 200);
+        List<Guid> pickedIds;
+
+        if (total <= poolSize)
+        {
+            pickedIds = await query
+                .OrderByDescending(s => s.CreatedAt)
+                .Select(s => s.Id)
+                .ToListAsync(ct);
+        }
+        else
+        {
+            var skip = Random.Shared.Next(0, total - poolSize + 1);
+            pickedIds = await query
+                .OrderByDescending(s => s.CreatedAt)
+                .Skip(skip)
+                .Take(poolSize)
+                .Select(s => s.Id)
+                .ToListAsync(ct);
+        }
+
+        var shuffledIds = pickedIds
+            .OrderBy(_ => Random.Shared.Next())
+            .Take(clampedLimit)
+            .ToList();
+
+        var items = await db.SeaLions
+            .AsNoTracking()
+            .Where(s => shuffledIds.Contains(s.Id))
+            .Select(s => new SeaLionListRow(
+                s.Id,
+                s.UserId,
+                s.User.Username,
+                s.Metadata,
+                s.CreatedAt,
+                s.Ratings.Count,
+                s.Comments.Count,
+                s.Ratings.Count == 0
+                    ? 0.0
+                    : s.Ratings.Average(r => (double)r.Value)))
+            .ToListAsync(ct);
+
+        var order = shuffledIds.Select((id, index) => (id, index)).ToDictionary(x => x.id, x => x.index);
+        var ordered = items.OrderBy(s => order[s.Id]).ToList();
+
+        var dtos = await ToDtoListAsync(ordered, ct);
+        return new PagedResponse<SeaLionDto>(dtos, total, 1, clampedLimit);
     }
 
     private async Task<IReadOnlyList<SeaLionDto>> ToDtoListAsync(

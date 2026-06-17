@@ -49,6 +49,14 @@ export interface SeaLionMetadata {
   name: string
   quality?: string
   age?: number
+  awards?: SeaLionAward[]
+}
+
+export interface SeaLionAward {
+  nomination: string
+  wonAt: string
+  periodStartUtc: string
+  periodEndUtc: string
 }
 
 export interface SeaLionDto {
@@ -99,8 +107,13 @@ export interface AuthResponse {
   user: UserDto
 }
 
+export const PAGE_SIZE = 12
+
 export interface SeaLionListResponse {
   items: SeaLionDto[]
+  total: number
+  page: number
+  pageSize: number
 }
 
 export interface GenerateSeaLionRequest {
@@ -125,4 +138,28 @@ export interface PublicUserProfileDto {
   sealCount: number
   badges: string[]
   seals: SeaLionDto[]
+  page: number
+  pageSize: number
+}
+
+export interface ContestCandidateDto {
+  seal: SeaLionDto
+  voteCount: number
+}
+
+export interface DailyContestDto {
+  contestId: string
+  nomination: string
+  periodStartUtc: string
+  periodEndUtc: string
+  previousWinner: SeaLionDto | null
+  previousWinnerPeriodEndUtc: string | null
+  candidates: ContestCandidateDto[]
+  userVoteSeaLionId: string | null
+}
+
+export interface CastContestVoteResponse {
+  seaLionId: string
+  voteCount: number
+  contest: DailyContestDto
 }

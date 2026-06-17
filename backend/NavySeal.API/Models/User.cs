@@ -11,4 +11,5 @@ public class User
     public ICollection<SeaLion> SeaLions { get; set; } = [];
     public ICollection<Comment> Comments { get; set; } = [];
     public ICollection<Rating> Ratings { get; set; } = [];
+    public ICollection<ContestVote> ContestVotes { get; set; } = [];
 }

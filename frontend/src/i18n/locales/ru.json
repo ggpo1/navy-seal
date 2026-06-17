@@ -4,15 +4,25 @@
     "loading": "Загрузка...",
     "errorLoading": "Ошибка загрузки"
   },
+  "pagination": {
+    "label": "Навигация по страницам",
+    "prev": "Назад",
+    "next": "Вперёд",
+    "pageOf": "Страница {{page}} из {{total}}"
+  },
   "meta": {
     "home": "Генератор морских котиков — Navy Seal",
     "profile": "Профиль — Navy Seal",
     "login": "Вход — Navy Seal",
     "register": "Регистрация — Navy Seal",
     "seaLion": "Морской котик — Navy Seal",
-    "userProfile": "Профиль пользователя — Navy Seal"
+    "userProfile": "Профиль пользователя — Navy Seal",
+    "discover": "Тиндер — Navy Seal",
+    "search": "Поиск — Navy Seal"
   },
   "search": {
+    "title": "Поиск",
+    "subtitle": "Найди пользователя по имени",
     "placeholder": "Найти пользователя...",
     "loading": "Ищем...",
     "empty": "Никого не нашли",
@@ -43,6 +53,31 @@
   },
   "header": {
     "profile": "Профиль"
+  },
+  "nav": {
+    "label": "Основная навигация",
+    "home": "Главная",
+    "discover": "Тиндер",
+    "search": "Поиск",
+    "profile": "Профиль"
+  },
+  "discover": {
+    "title": "Оцени котиков",
+    "subtitle": "Лайк — 5 звёзд, дизлайк — 1 звезда. Свайп вправо — нравится, влево — нет.",
+    "remaining_one": "Доступно для оценки: {{count}} котик",
+    "remaining_few": "Доступно для оценки: {{count}} котика",
+    "remaining_many": "Доступно для оценки: {{count}} котиков",
+    "remaining_other": "Доступно для оценки: {{count}} котиков",
+    "like": "Нравится",
+    "dislike": "Не нравится",
+    "empty": "Ты оценил всех доступных котиков!",
+    "emptyHint": "Загляни позже — появятся новые.",
+    "emptyDetail": "В выдачу попадают только чужие котики, которых ты ещё не оценивал (ни здесь, ни на странице котика). Свои котики не показываются.",
+    "authHintPrefix": "Войди, чтобы оценивать котиков.",
+    "loadingDeck": "Ищем котиков...",
+    "voting": "Сохраняем оценку...",
+    "voteFailed": "Не удалось сохранить оценку",
+    "reload": "Искать ещё"
   },
   "generator": {
     "title": "Генератор морских котиков",
@@ -116,7 +151,9 @@
     "notFound": "Пользователь не найден",
     "noSealsPublic": "У пользователя пока нет морских котиков",
     "emptyTitle": "Войдите, чтобы увидеть свой профиль",
+    "emptyHint": "Войдите или зарегистрируйтесь, чтобы видеть своих котиков и выходить из аккаунта.",
     "emptyAction": "Войти",
+    "account": "Аккаунт",
     "noSealsTitle": "У вас пока нет морских котиков",
     "noSealsAction": "Сгенерировать первого",
     "countSeal_one": "{{count}} котик",
@@ -174,6 +211,29 @@
     "hall_of_fame": {
       "title": "Зал славы",
       "description": "Котик в общем топе Navy Seal"
+    }
+  },
+  "contest": {
+    "title": "Голосование дня",
+    "subtitle": "Выбери лучшего котика за последние 24 часа — номинация «{{nomination}}»",
+    "deadline": "Голосование до {{date}} (UTC)",
+    "previousWinner": "Победитель прошлого дня",
+    "previousWinnerAward": "Победа в номинации «{{nomination}}» — {{date}}",
+    "empty": "За последние 24 часа котиков пока нет",
+    "vote": "Голосовать",
+    "voted": "Ваш голос",
+    "voting": "Голосуем...",
+    "votes_one": "{{count}} голос",
+    "votes_few": "{{count}} голоса",
+    "votes_many": "{{count}} голосов",
+    "votes_other": "{{count}} голосов",
+    "voteFailed": "Не удалось проголосовать",
+    "authHintPrefix": "Чтобы голосовать, ",
+    "authHintSuffix": ".",
+    "awardsTitle": "Награды",
+    "awardWonOn": "Победа {{date}}",
+    "nominations": {
+      "daily_best": "Котик дня"
     }
   },
   "errors": {

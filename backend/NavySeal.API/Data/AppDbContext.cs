@@ -14,6 +14,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
   public DbSet<SeaLion> SeaLions => Set<SeaLion>();
   public DbSet<Comment> Comments => Set<Comment>();
   public DbSet<Rating> Ratings => Set<Rating>();
+  public DbSet<DailyContest> DailyContests => Set<DailyContest>();
+  public DbSet<ContestVote> ContestVotes => Set<ContestVote>();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -77,6 +79,37 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
       entity.HasOne(r => r.User)
         .WithMany(u => u.Ratings)
         .HasForeignKey(r => r.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
+    });
+
+    modelBuilder.Entity<DailyContest>(entity =>
+    {
+      entity.HasKey(c => c.Id);
+      entity.HasIndex(c => c.PeriodStartUtc).IsUnique();
+      entity.HasIndex(c => new { c.FinalizedAt, c.PeriodEndUtc });
+      entity.Property(c => c.Nomination).HasMaxLength(64);
+      entity.HasOne(c => c.WinnerSeaLion)
+        .WithMany()
+        .HasForeignKey(c => c.WinnerSeaLionId)
+        .OnDelete(DeleteBehavior.SetNull);
+    });
+
+    modelBuilder.Entity<ContestVote>(entity =>
+    {
+      entity.HasKey(v => v.Id);
+      entity.HasIndex(v => new { v.ContestId, v.UserId }).IsUnique();
+      entity.HasIndex(v => v.SeaLionId);
+      entity.HasOne(v => v.Contest)
+        .WithMany(c => c.Votes)
+        .HasForeignKey(v => v.ContestId)
+        .OnDelete(DeleteBehavior.Cascade);
+      entity.HasOne(v => v.User)
+        .WithMany(u => u.ContestVotes)
+        .HasForeignKey(v => v.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
+      entity.HasOne(v => v.SeaLion)
+        .WithMany(s => s.ContestVotes)
+        .HasForeignKey(v => v.SeaLionId)
         .OnDelete(DeleteBehavior.Cascade);
     });
   }

@@ -37,17 +37,14 @@ export const SeaLionCanvas = forwardRef<SeaLionCanvasHandle, Props>(function Sea
   })
 
   useEffect(() => {
-    if (width != null && height != null) {
-      setDrawSize({ width, height })
-      return
-    }
-
     const container = containerRef.current
     if (!container) return
 
     const updateSize = () => {
       const rect = container.getBoundingClientRect()
-      const side = Math.max(1, Math.floor(Math.min(rect.width, rect.height)))
+      const maxW = width ?? Number.POSITIVE_INFINITY
+      const maxH = height ?? Number.POSITIVE_INFINITY
+      const side = Math.max(1, Math.floor(Math.min(rect.width, rect.height, maxW, maxH)))
       setDrawSize({ width: side, height: side })
     }
 
@@ -105,13 +102,13 @@ export const SeaLionCanvas = forwardRef<SeaLionCanvasHandle, Props>(function Sea
     },
   }), [metadata])
 
-  const fixedSize = width != null && height != null
+  const maxSize = width ?? height
 
   return (
     <div
       ref={containerRef}
       className={className ?? 'seal-canvas-wrap'}
-      style={fixedSize ? { width, height } : undefined}
+      style={maxSize != null ? { width: '100%', maxWidth: maxSize, aspectRatio: '1' } : undefined}
     >
       <canvas
         ref={canvasRef}

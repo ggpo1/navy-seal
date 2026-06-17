@@ -13,4 +13,6 @@ public record PublicUserProfileDto(
     DateTime CreatedAt,
     int SealCount,
     IReadOnlyList<string> Badges,
-    IReadOnlyList<SeaLionDto> Seals);
+    IReadOnlyList<SeaLionDto> Seals,
+    int Page = 1,
+    int PageSize = Pagination.DefaultPageSize);

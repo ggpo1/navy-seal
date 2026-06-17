@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api/client'
 import type { CommentDto, SeaLionDetailDto } from '../api/types'
 import { CommentSection } from '../components/CommentSection'
+import { SeaLionAwards } from '../components/SeaLionAwards'
 import { SeaLionCanvas, type SeaLionCanvasHandle } from '../components/SeaLionCanvas'
 import { StarRating } from '../components/StarRating'
 import { useAuth } from '../context/AuthContext'
@@ -134,7 +135,7 @@ export function SeaLionDetailPage() {
 
       <div className={`detail__hero ${qualityClassName(seal.metadata.quality)}`}>
         <div className="detail__canvas">
-          <SeaLionCanvas ref={canvasRef} metadata={seal.metadata} width={420} height={420} />
+          <SeaLionCanvas ref={canvasRef} metadata={seal.metadata} width={420} />
         </div>
 
         <div className="detail__info">
@@ -228,6 +229,8 @@ export function SeaLionDetailPage() {
               <dd>{t(`eyeStyle.${seal.metadata.eyeStyle}`)}</dd>
             </div>
           </dl>
+
+          <SeaLionAwards awards={seal.metadata.awards} />
         </div>
       </div>
 

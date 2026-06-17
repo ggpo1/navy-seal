@@ -5,7 +5,12 @@ import { api } from '../api/client'
 import type { UserSearchResultDto } from '../api/types'
 import { formatUsernameLabel, sanitizeUsernameInput } from '../utils/username'
 
-export function UserSearch() {
+interface Props {
+  variant?: 'compact' | 'page'
+  autoFocus?: boolean
+}
+
+export function UserSearch({ variant = 'compact', autoFocus = false }: Props) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const listboxId = useId()
@@ -57,26 +62,31 @@ export function UserSearch() {
     navigate(`/users/${username}`)
   }
 
+  const isPage = variant === 'page'
+  const trimmedQuery = query.trim()
+  const showResults = isPage ? trimmedQuery.length >= 2 : open
+
   return (
-    <div className="user-search" ref={containerRef}>
+    <div className={`user-search ${isPage ? 'user-search--page' : ''}`} ref={containerRef}>
       <input
         type="search"
         className="user-search__input"
         value={query}
         onChange={(e) => setQuery(sanitizeUsernameInput(e.target.value))}
-        onFocus={() => results.length > 0 && setOpen(true)}
+        onFocus={() => !isPage && results.length > 0 && setOpen(true)}
         placeholder={t('search.placeholder')}
         aria-label={t('search.placeholder')}
-        aria-expanded={open}
+        aria-expanded={showResults}
         aria-controls={listboxId}
         autoComplete="off"
+        autoFocus={autoFocus}
       />
 
-      {open && (
+      {showResults && (
         <div className="user-search__dropdown" id={listboxId} role="listbox">
           {loading && <p className="user-search__status">{t('search.loading')}</p>}
 
-          {!loading && results.length === 0 && query.trim().length >= 2 && (
+          {!loading && results.length === 0 && trimmedQuery.length >= 2 && (
             <p className="user-search__status">{t('search.empty')}</p>
           )}
 

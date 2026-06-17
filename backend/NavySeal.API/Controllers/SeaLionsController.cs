@@ -43,10 +43,13 @@ public class SeaLionsController(
 
     [HttpGet("recent")]
     [ProducesResponseType(typeof(SeaLionListResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetRecent([FromQuery] int limit = 12, CancellationToken ct = default)
+    public async Task<IActionResult> GetRecent(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = Pagination.DefaultPageSize,
+        CancellationToken ct = default)
     {
-        var items = await seaLionService.GetRecentAsync(limit, ct);
-        return Ok(new SeaLionListResponse(items));
+        var result = await seaLionService.GetRecentAsync(page, pageSize, ct);
+        return Ok(new SeaLionListResponse(result.Items, result.Total, result.Page, result.PageSize));
     }
 
     [HttpGet("top")]
@@ -84,6 +87,22 @@ public class SeaLionsController(
 
         var items = await seaLionService.GetByUserAsync(userId.Value, ct);
         return Ok(new SeaLionListResponse(items));
+    }
+
+    [Authorize]
+    [HttpGet("discover")]
+    [ProducesResponseType(typeof(SeaLionListResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetDiscover(
+        [FromQuery] int limit = 20,
+        CancellationToken ct = default)
+    {
+        var userId = GetUserId();
+        if (userId is null)
+            return Unauthorized();
+
+        var result = await seaLionService.GetDiscoverAsync(userId.Value, limit, ct);
+        return Ok(new SeaLionListResponse(result.Items, result.Total, result.Page, result.PageSize));
     }
 
     [HttpGet("{id:guid}")]

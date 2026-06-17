@@ -24,7 +24,7 @@ services:
     container_name: navy-seal-api
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=navyseal;Username=navyseal;Password=navyseal
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=navyseal;Username=navyseal;Password=navyseal;SSL Mode=Prefer;Trust Server Certificate=true;GSS Encryption Mode=Disable
       Jwt__Key: NavySeal-SuperSecret-Key-Min32Chars-Long!
       Jwt__Issuer: NavySeal.API
       Jwt__Audience: NavySeal.Client

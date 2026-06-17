@@ -4,15 +4,25 @@
     "loading": "Loading...",
     "errorLoading": "Failed to load"
   },
+  "pagination": {
+    "label": "Pagination",
+    "prev": "Previous",
+    "next": "Next",
+    "pageOf": "Page {{page}} of {{total}}"
+  },
   "meta": {
     "home": "Sea Lion Generator — Navy Seal",
     "profile": "Profile — Navy Seal",
     "login": "Log in — Navy Seal",
     "register": "Register — Navy Seal",
     "seaLion": "Sea Lion — Navy Seal",
-    "userProfile": "User profile — Navy Seal"
+    "userProfile": "User profile — Navy Seal",
+    "discover": "Discover — Navy Seal",
+    "search": "Search — Navy Seal"
   },
   "search": {
+    "title": "Search",
+    "subtitle": "Find a user by name",
     "placeholder": "Find a user...",
     "loading": "Searching...",
     "empty": "No users found",
@@ -41,6 +51,31 @@
   },
   "header": {
     "profile": "Profile"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "home": "Home",
+    "discover": "Discover",
+    "search": "Search",
+    "profile": "Profile"
+  },
+  "discover": {
+    "title": "Rate sea lions",
+    "subtitle": "Like = 5 stars, dislike = 1 star. Swipe right to like, left to pass.",
+    "remaining_one": "{{count}} sea lion left to rate",
+    "remaining_few": "{{count}} sea lions left to rate",
+    "remaining_many": "{{count}} sea lions left to rate",
+    "remaining_other": "{{count}} sea lions left to rate",
+    "like": "Like",
+    "dislike": "Pass",
+    "empty": "You've rated all available sea lions!",
+    "emptyHint": "Check back later for new ones.",
+    "emptyDetail": "Only other users' sea lions you haven't rated yet appear here (not on detail pages either). Your own sea lions are excluded.",
+    "authHintPrefix": "Sign in to rate sea lions.",
+    "loadingDeck": "Finding sea lions...",
+    "voting": "Saving your rating...",
+    "voteFailed": "Failed to save rating",
+    "reload": "Find more"
   },
   "generator": {
     "title": "Sea Lion Generator",
@@ -112,7 +147,9 @@
     "notFound": "User not found",
     "noSealsPublic": "This user has no sea lions yet",
     "emptyTitle": "Log in to see your profile",
+    "emptyHint": "Sign in or register to see your sea lions and sign out from here.",
     "emptyAction": "Log in",
+    "account": "Account",
     "noSealsTitle": "You don't have any sea lions yet",
     "noSealsAction": "Generate your first",
     "countSeal_one": "{{count}} sea lion",
@@ -168,6 +205,27 @@
     "hall_of_fame": {
       "title": "Hall of fame",
       "description": "Sea lion in the all-time top chart"
+    }
+  },
+  "contest": {
+    "title": "Daily vote",
+    "subtitle": "Pick the best sea lion from the last 24 hours — {{nomination}}",
+    "deadline": "Voting until {{date}} (UTC)",
+    "previousWinner": "Previous day's winner",
+    "previousWinnerAward": "Won {{nomination}} on {{date}}",
+    "empty": "No sea lions in the last 24 hours yet",
+    "vote": "Vote",
+    "voted": "Your vote",
+    "voting": "Voting...",
+    "votes_one": "{{count}} vote",
+    "votes_other": "{{count}} votes",
+    "voteFailed": "Could not cast vote",
+    "authHintPrefix": "To vote, ",
+    "authHintSuffix": ".",
+    "awardsTitle": "Awards",
+    "awardWonOn": "Won on {{date}}",
+    "nominations": {
+      "daily_best": "Sea lion of the day"
     }
   },
   "errors": {

@@ -7,7 +7,11 @@ namespace NavySeal.API.Services;
 public interface IUserService
 {
     Task<IReadOnlyList<UserSearchResultDto>> SearchAsync(string query, int limit, CancellationToken ct);
-    Task<PublicUserProfileDto?> GetPublicProfileAsync(string username, CancellationToken ct);
+    Task<PublicUserProfileDto?> GetPublicProfileAsync(
+        string username,
+        int page,
+        int pageSize,
+        CancellationToken ct);
 }
 
 public class UserService(AppDbContext db, IBadgeService badgeService) : IUserService
@@ -32,7 +36,11 @@ public class UserService(AppDbContext db, IBadgeService badgeService) : IUserSer
             .ToListAsync(ct);
     }
 
-    public async Task<PublicUserProfileDto?> GetPublicProfileAsync(string username, CancellationToken ct)
+    public async Task<PublicUserProfileDto?> GetPublicProfileAsync(
+        string username,
+        int page,
+        int pageSize,
+        CancellationToken ct)
     {
         var normalized = UsernameValidator.Normalize(username);
         if (string.IsNullOrWhiteSpace(normalized))
@@ -45,10 +53,18 @@ public class UserService(AppDbContext db, IBadgeService badgeService) : IUserSer
         if (user is null)
             return null;
 
-        var seals = await db.SeaLions
+        var (normalizedPage, normalizedSize, skip) = Pagination.Normalize(page, pageSize);
+
+        var sealsQuery = db.SeaLions
             .AsNoTracking()
-            .Where(s => s.UserId == user.Id)
+            .Where(s => s.UserId == user.Id);
+
+        var total = await sealsQuery.CountAsync(ct);
+
+        var seals = await sealsQuery
             .OrderByDescending(s => s.CreatedAt)
+            .Skip(skip)
+            .Take(normalizedSize)
             .Select(s => new
             {
                 s.Id,
@@ -83,8 +99,10 @@ public class UserService(AppDbContext db, IBadgeService badgeService) : IUserSer
             user.Id,
             user.Username,
             user.CreatedAt,
-            enrichedSeals.Count,
+            total,
             BadgeResolver.ForUser(badgeData),
-            enrichedSeals);
+            enrichedSeals,
+            normalizedPage,
+            normalizedSize);
     }
 }

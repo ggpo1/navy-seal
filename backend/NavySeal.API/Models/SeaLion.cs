@@ -10,4 +10,5 @@ public class SeaLion
 
     public ICollection<Comment> Comments { get; set; } = [];
     public ICollection<Rating> Ratings { get; set; } = [];
+    public ICollection<ContestVote> ContestVotes { get; set; } = [];
 }

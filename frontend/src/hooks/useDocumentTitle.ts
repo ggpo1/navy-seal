@@ -8,7 +8,11 @@ function resolveTitleKey(pathname: string):
   | 'meta.login'
   | 'meta.register'
   | 'meta.seaLion'
-  | 'meta.userProfile' {
+  | 'meta.userProfile'
+  | 'meta.discover'
+  | 'meta.search' {
+  if (pathname.startsWith('/discover')) return 'meta.discover'
+  if (pathname.startsWith('/search')) return 'meta.search'
   if (pathname.startsWith('/users/')) return 'meta.userProfile'
   if (pathname.startsWith('/sealions/')) return 'meta.seaLion'
   if (pathname.startsWith('/profile')) return 'meta.profile'

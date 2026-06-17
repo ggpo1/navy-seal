@@ -4,15 +4,25 @@
     "loading": "加载中...",
     "errorLoading": "加载失败"
   },
+  "pagination": {
+    "label": "分页",
+    "prev": "上一页",
+    "next": "下一页",
+    "pageOf": "第 {{page}} 页，共 {{total}} 页"
+  },
   "meta": {
     "home": "海狮生成器 — Navy Seal",
     "profile": "个人资料 — Navy Seal",
     "login": "登录 — Navy Seal",
     "register": "注册 — Navy Seal",
     "seaLion": "海狮 — Navy Seal",
-    "userProfile": "用户资料 — Navy Seal"
+    "userProfile": "用户资料 — Navy Seal",
+    "discover": "发现 — Navy Seal",
+    "search": "搜索 — Navy Seal"
   },
   "search": {
+    "title": "搜索",
+    "subtitle": "按用户名查找",
     "placeholder": "搜索用户...",
     "loading": "搜索中...",
     "empty": "未找到用户",
@@ -41,6 +51,31 @@
   },
   "header": {
     "profile": "个人资料"
+  },
+  "nav": {
+    "label": "主导航",
+    "home": "首页",
+    "discover": "发现",
+    "search": "搜索",
+    "profile": "我的"
+  },
+  "discover": {
+    "title": "给海狮打分",
+    "subtitle": "喜欢 = 5 星，不喜欢 = 1 星。右滑喜欢，左滑跳过。",
+    "remaining_one": "还可评价 {{count}} 只",
+    "remaining_few": "还可评价 {{count}} 只",
+    "remaining_many": "还可评价 {{count}} 只",
+    "remaining_other": "还可评价 {{count}} 只",
+    "like": "喜欢",
+    "dislike": "跳过",
+    "empty": "你已评价所有可见的海狮！",
+    "emptyHint": "稍后再来看看新的。",
+    "emptyDetail": "仅显示其他用户、且你尚未评分的海狮（包括在详情页评过的也不会再出现）。你自己的海狮不会显示。",
+    "authHintPrefix": "登录后即可评价海狮。",
+    "loadingDeck": "正在寻找海狮...",
+    "voting": "正在保存评分...",
+    "voteFailed": "保存评分失败",
+    "reload": "再找一批"
   },
   "generator": {
     "title": "海狮生成器",
@@ -112,7 +147,9 @@
     "notFound": "未找到用户",
     "noSealsPublic": "该用户还没有海狮",
     "emptyTitle": "请登录以查看你的个人资料",
+    "emptyHint": "登录或注册后可查看你的海狮，并在此退出账号。",
     "emptyAction": "登录",
+    "account": "账号",
     "noSealsTitle": "你还没有海狮",
     "noSealsAction": "生成你的第一个",
     "countSeal_one": "{{count}} 只海狮",
@@ -168,6 +205,26 @@
     "hall_of_fame": {
       "title": "名人堂",
       "description": "海狮进入总排行榜"
+    }
+  },
+  "contest": {
+    "title": "每日投票",
+    "subtitle": "为过去 24 小时内最佳海狮投票 — {{nomination}}",
+    "deadline": "投票截止 {{date}}（UTC）",
+    "previousWinner": "昨日冠军",
+    "previousWinnerAward": "获得「{{nomination}}」— {{date}}",
+    "empty": "过去 24 小时内还没有海狮",
+    "vote": "投票",
+    "voted": "已投票",
+    "voting": "投票中...",
+    "votes_other": "{{count}} 票",
+    "voteFailed": "投票失败",
+    "authHintPrefix": "投票请先",
+    "authHintSuffix": "。",
+    "awardsTitle": "奖项",
+    "awardWonOn": "获奖日期 {{date}}",
+    "nominations": {
+      "daily_best": "今日最佳海狮"
     }
   },
   "errors": {
